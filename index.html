@@ -619,43 +619,65 @@
 
       const uploadStatus = document.getElementById('uploadStatus');
       uploadStatus.style.display = 'block';
-      uploadStatus.textContent = `⏳ Uploading ${file.name}...`;
+      uploadStatus.innerHTML = `⏳ Uploading <strong>${escapeHtml(file.name)}</strong>...`;
 
+      // Method 1: Filebin with text/plain Blob to bypass CORS preflight
       try {
-        // Create an anonymous, random bin
-        const binId = 'qr_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+        const binId = 'doc_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
         const cleanName = encodeURIComponent(file.name.replace(/\s+/g, '_'));
         const uploadUrl = `https://filebin.net/${binId}/${cleanName}`;
 
+        const arrayBuf = await file.arrayBuffer();
+        const textBlob = new Blob([arrayBuf], { type: 'text/plain' });
+
         const res = await fetch(uploadUrl, {
           method: 'POST',
-          body: file
+          body: textBlob
         });
 
         if (res.ok) {
           currentRawContent = uploadUrl;
-          uploadStatus.innerHTML = `✅ Ready! Uploaded anonymously.`;
+          uploadStatus.innerHTML = `✅ <strong>${escapeHtml(file.name)}</strong> ready! Scans with app option.`;
           updateQrTarget();
           showToast('QR Code generated immediately!');
           return;
-        } else {
-          throw new Error('Upload response not ok');
         }
-      } catch (err) {
-        console.warn('Anonymous host fallback:', err);
-        // Fallback: Read as data url for small files or alert
-        if (file.size < 2000) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            currentRawContent = e.target.result;
-            uploadStatus.textContent = `✅ Loaded locally (${currentFileSize})`;
-            updateQrTarget();
-          };
-          reader.readAsDataURL(file);
-        } else {
-          uploadStatus.innerHTML = `⚠️ Direct upload could not connect. Paste a cloud link (Google Drive / OneDrive / Dropbox) in the Website Link tab for instant QR.`;
-        }
+      } catch (errFilebin) {
+        console.warn('Filebin error, trying fallback:', errFilebin);
       }
+
+      // Method 2: Gofile with FormData (explicit CORS support)
+      try {
+        uploadStatus.innerHTML = `⏳ Connecting to upload server...`;
+        const serverRes = await fetch('https://api.gofile.io/servers');
+        const serverData = await serverRes.json();
+        const server = (serverData.data && serverData.data.servers && serverData.data.servers[0]?.name) || 'store3';
+
+        const fd = new FormData();
+        fd.append('file', file);
+
+        const upRes = await fetch(`https://${server}.gofile.io/contents/uploadfile`, {
+          method: 'POST',
+          body: fd
+        });
+
+        const upData = await upRes.json();
+        if (upData.status === 'ok' && upData.data && upData.data.downloadPage) {
+          currentRawContent = upData.data.downloadPage;
+          uploadStatus.innerHTML = `✅ <strong>${escapeHtml(file.name)}</strong> ready! Scans with app option.`;
+          updateQrTarget();
+          showToast('QR Code generated immediately!');
+          return;
+        }
+      } catch (errGofile) {
+        console.warn('Gofile error:', errGofile);
+      }
+
+      uploadStatus.innerHTML = `⚠️ Direct upload could not connect. Paste a link (Google Drive / OneDrive / Dropbox) in the Website Link tab.`;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function removeUploadedFile() {

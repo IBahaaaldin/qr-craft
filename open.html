@@ -199,7 +199,11 @@
         primaryBtnIcon.textContent = '🟦';
         primaryBtnText.textContent = 'Open in Microsoft Word';
         tipNote.textContent = 'Tapping will launch Microsoft Word if installed on your device.';
-        deepLinkScheme = `ms-word:ofv|u|${encodeURI(fileUrl)}`;
+        if (fileUrl.includes('gofile.io')) {
+          deepLinkScheme = fileUrl;
+        } else {
+          deepLinkScheme = `ms-word:ofv|u|${encodeURI(fileUrl)}`;
+        }
       } else if (ext === 'xlsx' || ext === 'xls') {
         iconBadge.textContent = '📊';
         appTag.textContent = 'Microsoft Excel Spreadsheet';
