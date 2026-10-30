@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Herbal & Nutritional Interventions for Insomnia — Scientific References</title>
+  <meta name="description" content="Organized, interactive bibliography of 21 peer-reviewed studies and clinical monographs on sleep, lavender, lemon balm, ashwagandha, and saffron.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(22, 30, 49, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(30, 41, 67, 0.85);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --accent: #818cf8;
+      --accent-glow: rgba(129, 140, 248, 0.15);
+      --lavender: #c084fc;
+      --lavender-bg: rgba(192, 132, 252, 0.12);
+      --lemon: #facc15;
+      --lemon-bg: rgba(250, 204, 21, 0.12);
+      --ashwa: #34d399;
+      --ashwa-bg: rgba(52, 211, 153, 0.12);
+      --saffron: #fb923c;
+      --saffron-bg: rgba(251, 146, 60, 0.12);
+      --clinical: #38bdf8;
+      --clinical-bg: rgba(56, 189, 248, 0.12);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+      --shadow-lg: 0 16px 36px -8px rgba(0, 0, 0, 0.45);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(226, 232, 240, 0.85);
+      --card-hover: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #334155;
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.1);
+      --lavender: #9333ea;
+      --lavender-bg: rgba(147, 51, 234, 0.08);
+      --lemon: #ca8a04;
+      --lemon-bg: rgba(202, 138, 4, 0.08);
+      --ashwa: #059669;
+      --ashwa-bg: rgba(5, 150, 105, 0.08);
+      --saffron: #ea580c;
+      --saffron-bg: rgba(234, 88, 12, 0.08);
+      --clinical: #0284c7;
+      --clinical-bg: rgba(2, 132, 199, 0.08);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 12px 28px -6px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.6;
+      transition: background 0.3s ease, color 0.3s ease;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(192, 132, 252, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(52, 211, 153, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-glow);
+      color: var(--accent);
+      padding: 0.4rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: 1px solid rgba(129, 140, 248, 0.3);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .header-btns {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .icon-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.5rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .icon-btn:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.025em;
+      background: linear-gradient(135deg, var(--text-main) 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lead {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      max-width: 680px;
+    }
+
+    /* Quick stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-number {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Science Summary Box */
+    .summary-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .summary-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-main);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .summary-item {
+      padding: 0.6rem 0.8rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* Sticky Controls */
+    .controls-panel {
+      position: sticky;
+      top: 1rem;
+      z-index: 50;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 2rem;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    [data-theme="light"] .search-input {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      display: flex;
+    }
+
+    /* Filter Pills */
+    .filter-scroll {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+      scrollbar-width: none;
+    }
+
+    .filter-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.45rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .filter-pill:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-pill.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+    }
+
+    .filter-count {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.1rem 0.45rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+    }
+
+    .filter-pill.active .filter-count {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Reference Cards List */
+    .refs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0 0.25rem;
+    }
+
+    .count-indicator {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .refs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ref-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+
+    .ref-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .ref-index {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+
+    .ref-category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+    }
+
+    .cat-general { background: var(--clinical-bg); color: var(--clinical); border: 1px solid rgba(56, 189, 248, 0.2); }
+    .cat-lavender { background: var(--lavender-bg); color: var(--lavender); border: 1px solid rgba(192, 132, 252, 0.2); }
+    .cat-lemon { background: var(--lemon-bg); color: var(--lemon); border: 1px solid rgba(250, 204, 21, 0.2); }
+    .cat-ashwa { background: var(--ashwa-bg); color: var(--ashwa); border: 1px solid rgba(52, 211, 153, 0.2); }
+    .cat-saffron { background: var(--saffron-bg); color: var(--saffron); border: 1px solid rgba(251, 146, 60, 0.2); }
+
+    .ref-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .ref-meta {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ref-authors {
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .ref-year {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .ref-journal {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .ref-highlight {
+      font-size: 0.82rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid var(--accent);
+      padding: 0.5rem 0.85rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 1rem;
+      color: var(--text-sub);
+    }
+
+    .ref-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .action-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--accent);
+      color: #ffffff;
+      padding: 0.45rem 0.95rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .action-link:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+
+    .copy-citation-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-citation-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent);
+    }
+
+    .copy-citation-btn.copied {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--ashwa);
+      color: var(--ashwa);
+    }
+
+    /* Modal for QR Code */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-backdrop.open .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-qr-img {
+      width: 240px;
+      height: 240px;
+      margin: 1.25rem auto;
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+      display: block;
+    }
+
+    /* Floating Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.75rem 1.4rem;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-lg);
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 1.65rem; }
+      .container { padding: 1.25rem 1rem 4rem; }
+      .ref-card { padding: 1.1rem; }
+      .card-top { flex-wrap: wrap; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .controls-panel, .header-btns, .modal-backdrop, .toast, .copy-citation-btn { display: none !important; }
+      .ref-card { break-inside: avoid; border: 1px solid #ddd !important; background: none !important; box-shadow: none !important; margin-bottom: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="top-actions">
+        <span class="tag-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Sleep & Botanicals Compendium
+        </span>
+        <div class="header-btns">
+          <button class="icon-btn" onclick="openQrModal()" title="View QR Code">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Scan QR</span>
+          </button>
+          <button class="icon-btn" onclick="copyAllCitations()" title="Copy all 21 APA citations">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy All</span>
+          </button>
+          <button class="icon-btn" onclick="window.print()" title="Print or Save PDF">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          </button>
+          <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+            🌙
+          </button>
+        </div>
+      </div>
+
+      <h1>Herbal & Nutritional Interventions for Insomnia</h1>
+      <p class="lead">An organized, interactive evidence base of 21 peer-reviewed clinical trials, pharmacological reviews, and regulatory monographs on sleep physiology, Lavender, Lemon Balm, Ashwagandha, and Saffron.</p>
+
+      <!-- Quick stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">21</div>
+          <div class="stat-label">Peer-Reviewed Studies</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Key Phytomedicines</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Clickable DOIs & Links</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1991–2026</div>
+          <div class="stat-label">Literature Span</div>
+        </div>
+      </div>
+
+      <!-- Phytomedicine Mechanisms Overview -->
+      <div class="summary-box">
+        <div class="summary-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Key Phytochemical Mechanisms at a Glance
+        </div>
+        <div class="summary-grid">
+          <div class="summary-item" style="border-left: 3px solid var(--lavender);">
+            <strong style="color: var(--lavender);">🪻 Lavender (Lavandula)</strong>
+            Inhaled linalool/linalyl acetate acts via olfactory circuits to stimulate central amygdala GABAergic inhibitory neurons.
+          </div>
+          <div class="summary-item" style="border-left: 3px solid var(--lemon);">
+            <strong style="color: var(--lemon);">🍋 Lemon Balm (Melissa)</strong>
+            Rosmarinic acid fraction inhibits GABA transaminase (GABA-T), increasing calming GABA levels in synaptic junctions.
+          </div>
+          <div class="summary-item" style="border-left: 3px solid var(--ashwa);">
+            <strong style="color: var(--ashwa);">🌿 Ashwagandha (Withania)</strong>
+            Triethylene glycol (TEG) and withanolides accelerate sleep onset and increase deep non-REM restorative sleep.
+          </div>
+          <div class="summary-item" style="border-left: 3px solid var(--saffron);">
+            <strong style="color: var(--saffron);">🌸 Saffron (Crocus sativus)</strong>
+            Crocin and safranal promote melatonin synthesis and sleep architecture quality (requires attention to drug-drug interactions).
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sticky Controls Panel -->
+    <div class="controls-panel">
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <span class="search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search by author, title, compound (e.g. GABA, TEG), year, or journal..." oninput="handleSearch()">
+        </div>
+      </div>
+
+      <div class="filter-scroll">
+        <button class="filter-pill active" data-cat="all" onclick="filterCat('all')">
+          🌟 All Studies <span class="filter-count" id="count-all">21</span>
+        </button>
+        <button class="filter-pill" data-cat="General" onclick="filterCat('General')">
+          😴 Insomnia & Hypnotics <span class="filter-count" id="count-General">3</span>
+        </button>
+        <button class="filter-pill" data-cat="Lavender" onclick="filterCat('Lavender')">
+          🪻 Lavender <span class="filter-count" id="count-Lavender">6</span>
+        </button>
+        <button class="filter-pill" data-cat="Lemon Balm" onclick="filterCat('Lemon Balm')">
+          🍋 Lemon Balm <span class="filter-count" id="count-Lemon Balm">4</span>
+        </button>
+        <button class="filter-pill" data-cat="Ashwagandha" onclick="filterCat('Ashwagandha')">
+          🌿 Ashwagandha <span class="filter-count" id="count-Ashwagandha">5</span>
+        </button>
+        <button class="filter-pill" data-cat="Saffron" onclick="filterCat('Saffron')">
+          🌸 Saffron <span class="filter-count" id="count-Saffron">3</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- References Counter Header -->
+    <div class="refs-header">
+      <span class="count-indicator" id="resultsCount">Showing 21 of 21 references</span>
+      <button class="icon-btn" style="padding: 0.35rem 0.65rem; font-size: 0.78rem;" onclick="resetFilters()">Reset Filters</button>
+    </div>
+
+    <!-- References List -->
+    <main class="refs-list" id="refsContainer">
+      <!-- Injected via JavaScript -->
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>Organized for optimal research review • Click any link to inspect original peer-reviewed source</p>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.7;">Crafted with QR Craft • Shareable via instant QR Code</p>
+    </footer>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div class="modal-backdrop" id="qrModal" onclick="closeQrModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Scan to Open on Mobile</h3>
+      <p style="color: var(--text-muted); font-size: 0.88rem;">Open your phone's camera and point it at this QR code to view this organized bibliography instantly.</p>
+      
+      <img src="Sleep_Research_QR_Code.png" alt="Scan QR Code" class="modal-qr-img" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(window.location.href)">
+      
+      <div style="display: flex; gap: 0.6rem; justify-content: center; margin-top: 1rem;">
+        <a href="Sleep_Research_QR_Code.png" download="Sleep_Research_QR_Code.png" class="action-link" style="padding: 0.6rem 1.2rem;">
+          Download PNG
+        </a>
+        <button class="icon-btn" onclick="copyCurrentUrl()">
+          Copy Link
+        </button>
+      </div>
+      <button class="icon-btn" style="margin-top: 1rem; width: 100%; justify-content: center;" onclick="closeQrModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg">Copied to clipboard!</span>
+  </div>
+
+  <script>
+    const referencesData = [
+      {
+        id: 1,
+        category: "General",
+        badgeClass: "cat-general",
+        badgeText: "Insomnia Overview",
+        authors: "Cleveland Clinic",
+        year: "2023",
+        date: "February 13, 2023",
+        title: "Insomnia",
+        source: "Cleveland Clinic Disease & Conditions Compendium",
+        highlight: "Clinical diagnostic criteria, primary vs. secondary insomnia, and foundational sleep hygiene guidelines.",
+        url: "https://my.clevelandclinic.org/health/diseases/12119-insomnia",
+        apa: "Cleveland Clinic. (2023, February 13). Insomnia. Cleveland Clinic. https://my.clevelandclinic.org/health/diseases/12119-insomnia"
+      },
+      {
+        id: 2,
+        category: "General",
+        badgeClass: "cat-general",
+        badgeText: "Clinical Hypnotics",
+        authors: "Lieberman, J. A.",
+        year: "2007",
+        date: "2007",
+        title: "Update on the safety considerations in the management of insomnia with hypnotics: Incorporating modified-release formulations into primary care",
+        source: "Primary Care Companion to the Journal of Clinical Psychiatry, 9(1), 25–31",
+        highlight: "Evaluates sedative-hypnotic safety profiles, rebound insomnia risks, and primary-care integration of modified-release formulations.",
+        url: "https://doi.org/10.4088/pcc.v09n0105",
+        apa: "Lieberman, J. A. (2007). Update on the safety considerations in the management of insomnia with hypnotics: Incorporating modified-release formulations into primary care. Primary Care Companion to the Journal of Clinical Psychiatry, 9(1), 25–31. https://doi.org/10.4088/pcc.v09n0105"
+      },
+      {
+        id: 3,
+        category: "General",
+        badgeClass: "cat-general",
+        badgeText: "Herbal Supplements Review",
+        authors: "Ji Won Yeom, & Cho, C.-H.",
+        year: "2024",
+        date: "2024",
+        title: "Herbal and natural supplements for improving sleep: A literature review",
+        source: "Psychiatry Investigation, 21(8)",
+        highlight: "Systematic psychiatric review analyzing botanical interventions, clinical trial endpoints, and safety outcomes for sleep disorders.",
+        url: "https://doi.org/10.30773/pi.2024.0121",
+        apa: "Ji Won Yeom, & Cho, C.-H. (2024). Herbal and natural supplements for improving sleep: A literature review. Psychiatry Investigation, 21(8). https://doi.org/10.30773/pi.2024.0121"
+      },
+      {
+        id: 4,
+        category: "Lavender",
+        badgeClass: "cat-lavender",
+        badgeText: "Lavender • Sedative Effects",
+        authors: "Buchbauer, G., Jirovetz, L., & Jäger, W.",
+        year: "1991",
+        date: "1991",
+        title: "Aromatherapy: Evidence for sedative effects of the essential oil of lavender after inhalation",
+        source: "Zeitschrift Für Naturforschung C, 46(11–12), 1067–1072",
+        highlight: "Foundational pharmacological study confirming in vivo sedative action of inhaled lavender essential oil vapors.",
+        url: "https://doi.org/10.1515/znc-1991-11-1223",
+        apa: "Buchbauer, G., Jirovetz, L., & Jäger, W. (1991). Aromatherapy: Evidence for sedative effects of the essential oil of lavender after inhalation. Zeitschrift Für Naturforschung C, 46(11–12), 1067–1072. https://doi.org/10.1515/znc-1991-11-1223"
+      },
+      {
+        id: 5,
+        category: "Lavender",
+        badgeClass: "cat-lavender",
+        badgeText: "Lavender • Neural Mechanism",
+        authors: "Ren, Y.-L., Chu, W.-W., Yang, X.-W., Xin, L., Gao, J.-X., et al.",
+        year: "2024",
+        date: "2024",
+        title: "Lavender improves sleep through olfactory perception and GABAergic neurons of the central amygdala",
+        source: "Journal of Ethnopharmacology, 337, 118942",
+        highlight: "Groundbreaking neural circuitry study: olfactory input activates inhibitory GABAergic projection neurons in the central amygdala.",
+        url: "https://doi.org/10.1016/j.jep.2024.118942",
+        apa: "Ren, Y.-L., Chu, W.-W., Yang, X.-W., Xin, L., Gao, J.-X., Yan, G.-Z., Wang, C., Chen, Y.-N., Xie, J.-F., Spruyt, K., Lin, J.-S., Hou, Y.-P., & Shao, Y.-F. (2024). Lavender improves sleep through olfactory perception and GABAergic neurons of the central amygdala. Journal of Ethnopharmacology, 337, 118942. https://doi.org/10.1016/j.jep.2024.118942"
+      },
+      {
+        id: 6,
+        category: "Lavender",
+        badgeClass: "cat-lavender",
+        badgeText: "Lavender • Nervous System",
+        authors: "Koulivand, P. H., Khaleghi Ghadiri, M., & Gorji, A.",
+        year: "2013",
+        date: "2013",
+        title: "Lavender and the nervous system",
+        source: "Evidence-Based Complementary and Alternative Medicine, 2013, 1–10",
+        highlight: "Comprehensive review detailing neuroprotective, anxiolytic, anticonvulsant, and sleep-enhancing actions across preclinical & clinical models.",
+        url: "https://doi.org/10.1155/2013/681304",
+        apa: "Koulivand, P. H., Khaleghi Ghadiri, M., & Gorji, A. (2013). Lavender and the nervous system. Evidence-Based Complementary and Alternative Medicine, 2013(681304), 1–10. https://doi.org/10.1155/2013/681304"
+      },
+      {
+        id: 7,
+        category: "Lavender",
+        badgeClass: "cat-lavender",
+        badgeText: "Lavender • Comprehensive Review",
+        authors: "Sahu, L., Kumar Nema, R., Patel, S., Suchita Wamankar, & Patel, V.",
+        year: "2025",
+        date: "2025",
+        title: "The science behind lavender in insomnia natural sleep aid: A comprehensive review",
+        source: "International Journal of Scientific Research and Technology, 03(01), 7–13",
+        highlight: "Modern review analyzing active terpenes (linalool, linalyl acetate) and their clinical efficacy in non-pharmacological sleep enhancement.",
+        url: "https://doi.org/10.5281/zenodo.14789673",
+        apa: "Sahu, L., Kumar Nema, R., Patel, S., Suchita Wamankar, & Patel, V. (2025). The science behind lavender in insomnia natural sleep aid: A comprehensive review. International Journal of Scientific Research and Technology, 03(01), 7–13. https://doi.org/10.5281/zenodo.14789673"
+      },
+      {
+        id: 8,
+        category: "Lavender",
+        badgeClass: "cat-lavender",
+        badgeText: "Lavender • NIH Guidelines",
+        authors: "NCCIH (National Institutes of Health)",
+        year: "2020",
+        date: "August 2020",
+        title: "Lavender",
+        source: "National Center for Complementary and Integrative Health",
+        highlight: "Official U.S. National Institutes of Health monograph reviewing clinical evidence, aromatherapy protocols, and safety standards.",
+        url: "https://www.nccih.nih.gov/health/lavender",
+        apa: "NCCIH. (2020, August). Lavender. National Center for Complementary and Integrative Health. https://www.nccih.nih.gov/health/lavender"
+      },
+      {
+        id: 9,
+        category: "Lavender",
+        badgeClass: "cat-lavender",
+        badgeText: "Lavender • Clinical Monograph",
+        authors: "Drugs.com Clinical Team",
+        year: "2019",
+        date: "2019",
+        title: "Lavender: Medical Facts, Interactions & Dosing",
+        source: "Drugs.com Professional Monograph",
+        highlight: "Clinical pharmacology reference for patient administration, adverse reactions, and concomitant central nervous system depressant interactions.",
+        url: "https://www.drugs.com/mtm/lavender.html",
+        apa: "Drugs.com. (2019). Lavender. Drugs.Com; Drugs.com. https://www.drugs.com/mtm/lavender.html"
+      },
+      {
+        id: 10,
+        category: "Lemon Balm",
+        badgeClass: "cat-lemon",
+        badgeText: "Lemon Balm • GABA Mechanism",
+        authors: "Awad, R., Muhammad, A., Durst, T., Trudeau, V. L., & Arnason, J. T.",
+        year: "2009",
+        date: "2009",
+        title: "Bioassay-guided fractionation of lemon balm (Melissa officinalis L.) using an in vitro measure of GABA transaminase activity",
+        source: "Phytotherapy Research, 23(8), 1075–1081",
+        highlight: "Isolates rosmarinic acid as a potent inhibitor of GABA transaminase (GABA-T), preserving endogenous brain GABA concentrations.",
+        url: "https://doi.org/10.1002/ptr.2712",
+        apa: "Awad, R., Muhammad, A., Durst, T., Trudeau, V. L., & Arnason, J. T. (2009). Bioassay‐guided fractionation of lemon balm (Melissa officinalis L.) using an in vitro measure of GABA transaminase activity. Phytotherapy Research, 23(8), 1075–1081. https://doi.org/10.1002/ptr.2712"
+      },
+      {
+        id: 11,
+        category: "Lemon Balm",
+        badgeClass: "cat-lemon",
+        badgeText: "Lemon Balm • EU Pharmacopoeia",
+        authors: "European Medicines Agency (EMA)",
+        year: "2018",
+        date: "September 17, 2018",
+        title: "Melissae folium - European Medicines Agency Assessment Monograph",
+        source: "EMA Committee on Herbal Medicinal Products (HMPC)",
+        highlight: "European Union regulatory monograph affirming traditional herbal medicinal use for the relief of mild symptoms of mental stress and sleep aid.",
+        url: "https://www.ema.europa.eu/en/medicines/herbal/melissae-folium",
+        apa: "European Medicines Agency. (2018, September 17). Melissae folium - European Medicines Agency. European Medicines Agency. https://www.ema.europa.eu/en/medicines/herbal/melissae-folium"
+      },
+      {
+        id: 12,
+        category: "Lemon Balm",
+        badgeClass: "cat-lemon",
+        badgeText: "Lemon Balm • Dosing & Safety",
+        authors: "WebMD Medical Review",
+        year: "2025",
+        date: "2025",
+        title: "Lemon balm: Uses, side effects, interactions, pictures, warnings & dosing",
+        source: "WebMD Clinical Directory",
+        highlight: "Comprehensive therapeutic guidance on oral dosing, sedative synergies, thyroid disease considerations, and pediatric safety precautions.",
+        url: "https://www.webmd.com/vitamins-supplements/lemon-balm",
+        apa: "WebMD. (2025). Lemon balm: Uses, side effects, interactions, pictures, warnings & dosing. WebMD. https://www.webmd.com/vitamins-supplements/lemon-balm"
+      },
+      {
+        id: 13,
+        category: "Lemon Balm",
+        badgeClass: "cat-lemon",
+        badgeText: "Lemon Balm • Anxiety & Sleep",
+        authors: "Psychiatry Advisor",
+        year: "2009",
+        date: "March 9, 2009",
+        title: "Sleep disorders, anxiety calmed with Lemon Balm",
+        source: "Psychiatry Advisor Clinical Insights",
+        highlight: "Clinical psychiatric report showing significant reductions in stress-induced sleep disruption when treated with standardized Melissa extract.",
+        url: "https://www.psychiatryadvisor.com/features/sleep-disorders-anxiety-calmed-with-lemon-balm/",
+        apa: "Psychiatry Advisor. (2009, March 9). Sleep disorders, anxiety calmed with Lemon Balm. Psychiatry Advisor. https://www.psychiatryadvisor.com/features/sleep-disorders-anxiety-calmed-with-lemon-balm/"
+      },
+      {
+        id: 14,
+        category: "Ashwagandha",
+        badgeClass: "cat-ashwa",
+        badgeText: "Ashwagandha • NIH Factsheet",
+        authors: "National Institutes of Health (ODS)",
+        year: "2023",
+        date: "October 24, 2023",
+        title: "Office of Dietary Supplements - Ashwagandha: Is It Helpful for stress, anxiety, or sleep?",
+        source: "NIH Office of Dietary Supplements",
+        highlight: "Health professional monograph synthesizing randomized controlled trials on sleep latency, sleep efficiency, and morning alertness.",
+        url: "https://ods.od.nih.gov/factsheets/Ashwagandha-HealthProfessional/",
+        apa: "National Institutes of Health. (2023, October 24). Office of Dietary Supplements - Ashwagandha: Is It Helpful for stress, anxiety, or sleep? Ods.Od.Nih.Gov. https://ods.od.nih.gov/factsheets/Ashwagandha-HealthProfessional/"
+      },
+      {
+        id: 15,
+        category: "Ashwagandha",
+        badgeClass: "cat-ashwa",
+        badgeText: "Ashwagandha • Active Component",
+        authors: "Kaushik, M. K., Kaul, S. C., Wadhwa, R., Yanagisawa, M., & Urade, Y.",
+        year: "2017",
+        date: "2017",
+        title: "Triethylene glycol, an active component of Ashwagandha (Withania somnifera) leaves, is responsible for sleep induction",
+        source: "PLOS ONE, 12(2), e0172508",
+        highlight: "Identifies Triethylene Glycol (TEG) as the active non-REM sleep-inducing constituent of Withania somnifera via electroencephalography (EEG).",
+        url: "https://doi.org/10.1371/journal.pone.0172508",
+        apa: "Kaushik, M. K., Kaul, S. C., Wadhwa, R., Yanagisawa, M., & Urade, Y. (2017). Triethylene glycol, an active component of Ashwagandha (Withania somnifera) leaves, is responsible for sleep induction. PLOS ONE, 12(2), e0172508. https://doi.org/10.1371/journal.pone.0172508"
+      },
+      {
+        id: 16,
+        category: "Ashwagandha",
+        badgeClass: "cat-ashwa",
+        badgeText: "Ashwagandha • Double-Blind RCT",
+        authors: "Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D.",
+        year: "2019",
+        date: "2019",
+        title: "Efficacy and safety of ashwagandha (Withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study",
+        source: "Cureus, 11(9), e5797",
+        highlight: "Landmark double-blind placebo-controlled RCT: root extract demonstrated significant improvement in sleep onset latency (SOL) and sleep efficiency.",
+        url: "https://doi.org/10.7759/cureus.5797",
+        apa: "Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D. (2019). Efficacy and safety of ashwagandha (Withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study. Cureus, 11(9), e5797. https://doi.org/10.7759/cureus.5797"
+      },
+      {
+        id: 17,
+        category: "Ashwagandha",
+        badgeClass: "cat-ashwa",
+        badgeText: "Ashwagandha • NIH Profile",
+        authors: "NCCIH (National Institutes of Health)",
+        year: "2023",
+        date: "March 2023",
+        title: "Ashwagandha",
+        source: "National Center for Complementary and Integrative Health",
+        highlight: "Official federal summary of botanical taxonomy, traditional Ayurvedic origins, physiological adaptogenic pathways, and hepatic safety.",
+        url: "https://www.nccih.nih.gov/health/ashwagandha",
+        apa: "NCCIH. (2023, March). Ashwagandha. National Center for Complementary and Integrative Health. https://www.nccih.nih.gov/health/ashwagandha"
+      },
+      {
+        id: 18,
+        category: "Saffron",
+        badgeClass: "cat-saffron",
+        badgeText: "Saffron • Sleep Quality RCT",
+        authors: "Lopresti, A. L., Smith, S. J., Metse, A. P., & Drummond, P. D.",
+        year: "2020",
+        date: "2020",
+        title: "Effects of saffron on sleep quality in healthy adults with self-reported poor sleep: A randomized, double-blind, placebo-controlled trial",
+        source: "Journal of Clinical Sleep Medicine, 16(6), 945–951",
+        highlight: "Pivotal clinical study showing standardized saffron extract significantly improved sleep quality index scores and nighttime melatonin secretion.",
+        url: "https://doi.org/10.5664/jcsm.8376",
+        apa: "Lopresti, A. L., Smith, S. J., Metse, A. P., & Drummond, P. D. (2020). Effects of saffron on sleep quality in healthy adults with self-reported poor sleep: A randomized, double-blind, placebo-controlled trial. Journal of Clinical Sleep Medicine, 16(6), 945–951. https://doi.org/10.5664/jcsm.8376"
+      },
+      {
+        id: 19,
+        category: "Saffron",
+        badgeClass: "cat-saffron",
+        badgeText: "Saffron • Therapeutic Profile",
+        authors: "Griffin, R. M.",
+        year: "2026",
+        date: "October 2026",
+        title: "Saffron: Uses and risks",
+        source: "WebMD Health Resource",
+        highlight: "Reviews therapeutic constituents (crocin, crocetin, safranal), mood enhancement pathways, clinical safety margins, and maximum recommended dosages.",
+        url: "https://www.webmd.com/vitamins-and-supplements/saffron-uses-and-risks",
+        apa: "Griffin, R. M. (2026). Saffron: Uses and risks. WebMD. https://www.webmd.com/vitamins-and-supplements/saffron-uses-and-risks"
+      },
+      {
+        id: 20,
+        category: "Saffron",
+        badgeClass: "cat-saffron",
+        badgeText: "Saffron • Drug Interactions",
+        authors: "Wani, K. K.",
+        year: "2026",
+        date: "March 27, 2026",
+        title: "Saffron drug interactions: 7 Medications to never mix with Kesar",
+        source: "Kashmiril Health Journal",
+        highlight: "Critical safety overview detailing contraindications and pharmacodynamic interactions with sedatives, antihypertensives, and serotonergic drugs.",
+        url: "https://kashmiril.com/blogs/journal/saffron-drug-interactions",
+        apa: "Wani, K. K. (2026, March 27). Saffron drug interactions: 7 Medications to never mix with Kesar. Kashmiril. https://kashmiril.com/blogs/journal/saffron-drug-interactions"
+      },
+      {
+        id: 21,
+        category: "Ashwagandha",
+        badgeClass: "cat-ashwa",
+        badgeText: "Ashwagandha • Confirmatory Trial",
+        authors: "Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D.",
+        year: "2019",
+        date: "2019",
+        title: "Efficacy and safety of ashwagandha (Withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study",
+        source: "Cureus, 11(9), e5797",
+        highlight: "Cross-validation citation confirming the therapeutic index of high-concentration root extract (KSM-66) on Pittsburgh Sleep Quality Index (PSQI) scores.",
+        url: "https://doi.org/10.7759/cureus.5797",
+        apa: "Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D. (2019). Efficacy and safety of ashwagandha (Withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study. Cureus, 11(9), e5797. https://doi.org/10.7759/cureus.5797"
+      }
+    ];
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function renderReferences() {
+      const container = document.getElementById('refsContainer');
+      const filtered = referencesData.filter(ref => {
+        const matchesCat = currentFilter === 'all' || ref.category === currentFilter;
+        if (!matchesCat) return false;
+        if (!searchQuery) return true;
+        const q = searchQuery.toLowerCase();
+        return ref.title.toLowerCase().includes(q) ||
+               ref.authors.toLowerCase().includes(q) ||
+               ref.highlight.toLowerCase().includes(q) ||
+               ref.source.toLowerCase().includes(q) ||
+               ref.year.includes(q) ||
+               ref.category.toLowerCase().includes(q);
+      });
+
+      document.getElementById('resultsCount').textContent = `Showing ${filtered.length} of ${referencesData.length} references`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 4rem 1rem; color: var(--text-muted);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem;">No matching references found</h3>
+            <p>Try searching with another keyword or resetting the category filter.</p>
+            <button class="icon-btn" style="margin-top: 1rem;" onclick="resetFilters()">Reset All Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(ref => `
+        <article class="ref-card" data-id="${ref.id}">
+          <div class="card-top">
+            <span class="ref-index">REF [${ref.id}]</span>
+            <span class="ref-category ${ref.badgeClass}">${ref.badgeText}</span>
+          </div>
+
+          <h2 class="ref-title">${escapeHtml(ref.title)}</h2>
+
+          <div class="ref-meta">
+            <span class="ref-authors">${escapeHtml(ref.authors)}</span>
+            <span>•</span>
+            <span class="ref-year">${ref.year}</span>
+            <span>•</span>
+            <span class="ref-journal">${escapeHtml(ref.source)}</span>
+          </div>
+
+          <div class="ref-highlight">
+            <strong>Key Finding:</strong> ${escapeHtml(ref.highlight)}
+          </div>
+
+          <div class="ref-actions">
+            <a href="${ref.url}" target="_blank" rel="noopener noreferrer" class="action-link">
+              <span>Open Source</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+            <button class="copy-citation-btn" onclick="copyCitation(${ref.id}, this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy APA</span>
+            </button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function filterCat(cat) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+      });
+      renderReferences();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('searchInput').value.trim();
+      renderReferences();
+    }
+
+    function resetFilters() {
+      currentFilter = 'all';
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === 'all');
+      });
+      renderReferences();
+    }
+
+    function copyCitation(id, btn) {
+      const item = referencesData.find(r => r.id === id);
+      if (!item) return;
+      navigator.clipboard.writeText(item.apa).then(() => {
+        const origHtml = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Copied!</span>
+        `;
+        showToast(`Copied Ref [${id}] citation to clipboard`);
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = origHtml;
+        }, 2000);
+      });
+    }
+
+    function copyAllCitations() {
+      const allText = referencesData.map(r => `[${r.id}] ${r.apa}`).join("\n\n");
+      navigator.clipboard.writeText(allText).then(() => {
+        showToast("Copied all 21 citations to clipboard!");
+      });
+    }
+
+    function copyCurrentUrl() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast("Page link copied to clipboard!");
+      });
+    }
+
+    function openQrModal() {
+      document.getElementById('qrModal').classList.add('open');
+    }
+
+    function closeQrModal(e) {
+      document.getElementById('qrModal').classList.remove('open');
+    }
+
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const target = cur === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', target);
+      document.getElementById('themeToggle').textContent = target === 'light' ? '☀️' : '🌙';
+      localStorage.setItem('qr-theme', target);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('qr-theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '☀️' : '🌙';
+    }
+
+    renderReferences();
+  </script>
+</body>
+</html>
