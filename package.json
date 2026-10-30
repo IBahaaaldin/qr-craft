@@ -1,23 +1,14 @@
 {
-  "name": "qr-craft",
+  "name": "qr-generator",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Simple QR Code Generator for files and links with app launch support",
+  "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/IBahaaaldin/qr-craft.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["qr", "qrcode", "generator", "document"],
+  "license": "MIT",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/IBahaaaldin/qr-craft/issues"
-  },
-  "homepage": "https://github.com/IBahaaaldin/qr-craft#readme",
   "dependencies": {
     "jszip": "^3.10.2",
     "lz-string": "^1.5.0",
