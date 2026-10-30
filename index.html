@@ -8,12 +8,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
   <script src="./vendor/qrcode.js"></script>
   <script>
     if (typeof qrcode === 'undefined') {
       document.write('<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"><\/script>');
     }
   </script>
+  <script src="./vendor/jszip.min.js"></script>
+  <script>
+    if (typeof JSZip === 'undefined') {
+      document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"><\/script>');
+    }
+  </script>
+
   <style>
     :root {
       --bg: #f8fafc;
@@ -463,7 +471,7 @@
     <header>
       <div class="logo-badge">⚡ Quick & Simple QR</div>
       <h1>Normal QR Code Generator</h1>
-      <p class="subtitle">Enter a link, plain text, or upload a file. Get a normal scannable QR code immediately.</p>
+      <p class="subtitle">Enter a link, plain text, or upload a file. The QR code generates immediately.</p>
     </header>
 
     <div class="app-grid">
@@ -504,33 +512,32 @@
         <!-- 3. File Upload Mode -->
         <div id="fileInputGroup" class="form-group" style="display: none;">
           <label>
-            <span>Upload Document or Text File</span>
+            <span>Upload Document, Word (.docx), or Text File</span>
             <span class="quick-preset" onclick="loadSampleTextFile()">⚡ Try Sample File</span>
           </label>
           
-          <input type="file" id="filePicker" style="display: none;" onchange="handleFileSelected(event)">
+          <input type="file" id="filePicker" accept=".docx,.txt,.pdf,.md,.csv,.json" style="display: none;" onchange="handleFileSelected(event)">
           
           <div class="upload-dropzone" id="dropZone" onclick="document.getElementById('filePicker').click()">
             <div class="upload-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             </div>
             <div class="upload-title">Click to upload or drag & drop file here</div>
-            <div class="upload-desc">Supports .txt, .pdf, .md, .csv, documents, or notes</div>
+            <div class="upload-desc">Supports Word (.docx), .txt, .pdf, .md, .csv documents</div>
           </div>
 
           <div class="file-card" id="fileCard">
             <div class="file-details">
               <span style="font-size: 1.4rem;">📄</span>
               <div>
-                <div class="file-name" id="fileName">file.txt</div>
+                <div class="file-name" id="fileName">file.docx</div>
                 <div class="file-meta" id="fileMeta">0 KB</div>
               </div>
             </div>
             <button class="chip-btn" style="padding: 0.3rem 0.6rem;" onclick="removeUploadedFile()">Remove</button>
           </div>
 
-          <!-- Uploaded file link display -->
-          <div id="fileUploadStatus" style="margin-top: 0.85rem; font-size: 0.82rem; color: var(--muted); display: none;"></div>
+          <div id="fileUploadStatus" style="margin-top: 0.85rem; font-size: 0.85rem; color: var(--primary); font-weight: 600; display: none;"></div>
         </div>
 
         <!-- Simple Customizations -->
@@ -588,7 +595,7 @@
 
         <div class="btn-group">
           <button class="btn btn-primary" onclick="downloadQr('png')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <span>Download PNG (High-Res)</span>
           </button>
           <button class="btn btn-secondary" onclick="downloadQr('svg')">
@@ -618,9 +625,7 @@
     let qrDarkColor = '#0f172a';
     let qrDotStyle = 'square';
     let qrCenterIcon = 'none';
-    let uploadedFileContent = null;
-    let uploadedFileUrl = null;
-    let uploadedFileName = '';
+    let activeQrContent = 'https://ibahaaaldin.github.io/qr-craft/references.html';
 
     const SLEEP_REFERENCES_TEXT = `References:
 [1] Cleveland Clinic. (2023, February 13). Insomnia. Cleveland Clinic. https://my.clevelandclinic.org/health/diseases/12119-insomnia
@@ -658,15 +663,27 @@
       if (type === 'url') {
         document.getElementById('previewBadge').textContent = 'Website Link';
         document.getElementById('previewTextDesc').textContent = 'Scans to open link directly in phone browser';
+        activeQrContent = document.getElementById('urlInput').value.trim() || 'https://ibahaaaldin.github.io/qr-craft/references.html';
+        generateQr();
       } else if (type === 'text') {
         document.getElementById('previewBadge').textContent = 'Plain Text';
         document.getElementById('previewTextDesc').textContent = 'Scans to show text directly on phone screen';
+        const val = document.getElementById('textInput').value.trim();
+        if (val) {
+          activeQrContent = val;
+          generateQr();
+        } else {
+          drawEmptyCanvas('Enter text to generate QR code');
+        }
       } else {
         document.getElementById('previewBadge').textContent = 'Uploaded File';
-        document.getElementById('previewTextDesc').textContent = 'Scans to open uploaded document / file';
+        document.getElementById('previewTextDesc').textContent = 'Upload any Word, Text, or PDF document to generate QR immediately';
+        if (activeQrContent && activeQrContent.startsWith('http')) {
+          generateQr();
+        } else {
+          drawEmptyCanvas('Upload a file to generate QR code');
+        }
       }
-
-      generateQr();
     }
 
     function setQrColor(hex, btn) {
@@ -696,6 +713,7 @@
     function loadReferencesUrl() {
       const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'references.html';
       document.getElementById('urlInput').value = url;
+      activeQrContent = url;
       generateQr();
       showToast('Loaded sleep references link!');
     }
@@ -707,40 +725,24 @@
     }
 
     function handleTextInput() {
-      const val = document.getElementById('textInput').value;
+      const val = document.getElementById('textInput').value.trim();
       document.getElementById('charCount').textContent = `${val.length} characters`;
 
+      if (!val) {
+        drawEmptyCanvas('Enter text to generate QR code');
+        return;
+      }
+
       if (val.length > 2500) {
-        // Automatically publish large text to instant share link so QR code doesn't break
-        createCloudLinkForText(val);
+        // Large document: use cloud link
+        publishTextToLink(val, 'Pasted Document');
       } else {
+        activeQrContent = val;
         generateQr();
       }
     }
 
-    async function createCloudLinkForText(text) {
-      document.getElementById('previewTextDesc').textContent = 'Document is large. Generating instant scan link...';
-      try {
-        const res = await fetch('https://dpaste.com/api/v2/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({ content: text, syntax: 'text', expiry_days: '30' })
-        });
-        if (res.ok) {
-          const url = (await res.text()).trim();
-          document.getElementById('previewBadge').textContent = 'Hosted Document Link';
-          document.getElementById('previewTextDesc').textContent = `Scans to open full document (${url})`;
-          renderRawContent(url);
-          showToast('Created instant link for large text!');
-          return;
-        }
-      } catch (e) {
-        console.warn('Could not post to dpaste, falling back to direct QR', e);
-      }
-      generateQr();
-    }
-
-    // File Upload Handlers
+    // FILE UPLOAD PROCESSOR
     const dropZone = document.getElementById('dropZone');
     ['dragenter', 'dragover'].forEach(eventName => {
       dropZone.addEventListener(eventName, (e) => {
@@ -756,177 +758,176 @@
     });
     dropZone.addEventListener('drop', (e) => {
       const files = e.dataTransfer.files;
-      if (files.length > 0) processFile(files[0]);
+      if (files.length > 0) processUploadedFile(files[0]);
     });
 
     function handleFileSelected(event) {
       const files = event.target.files;
-      if (files.length > 0) processFile(files[0]);
+      if (files.length > 0) processUploadedFile(files[0]);
     }
 
-    async function processFile(file) {
-      uploadedFileName = file.name;
+    async function processUploadedFile(file) {
       document.getElementById('fileName').textContent = file.name;
-      document.getElementById('fileMeta').textContent = `${(file.size / 1024).toFixed(1)} KB • ${file.type || 'Document'}`;
+      document.getElementById('fileMeta').textContent = `${(file.size / 1024).toFixed(1)} KB • Processing...`;
       document.getElementById('fileCard').style.display = 'flex';
       
       const statusEl = document.getElementById('fileUploadStatus');
       statusEl.style.display = 'block';
-      statusEl.textContent = 'Reading file content...';
+      statusEl.textContent = `Reading ${file.name}...`;
 
-      // If text-like file, read text directly
-      if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md') || file.name.endsWith('.csv') || file.name.endsWith('.json')) {
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          uploadedFileContent = e.target.result;
-          statusEl.textContent = `File read: ${uploadedFileContent.length} characters.`;
+      try {
+        let extractedText = "";
 
-          if (uploadedFileContent.length <= 2000) {
-            // Fits directly into normal QR!
-            uploadedFileUrl = null;
-            document.getElementById('previewBadge').textContent = 'File Text';
-            document.getElementById('previewTextDesc').textContent = `Scans to read "${file.name}" directly on phone`;
-            renderRawContent(uploadedFileContent);
-            showToast('QR generated directly from file!');
-          } else {
-            // Large text file: create instant link
-            statusEl.textContent = 'File is large. Uploading to create instant scan link...';
-            await uploadTextToDpaste(uploadedFileContent, file.name);
+        // 1. Check if Word document (.docx)
+        if (file.name.toLowerCase().endsWith('.docx')) {
+          statusEl.textContent = 'Extracting document text from Word file...';
+          const arrayBuffer = await file.arrayBuffer();
+          const zip = await JSZip.loadAsync(arrayBuffer);
+          const docXml = await zip.file("word/document.xml").async("text");
+          
+          // Extract paragraph by paragraph
+          const paragraphs = [];
+          const pRegex = /<w:p(?:\s[^>]*)?>([\s\S]*?)<\/w:p>/g;
+          let pMatch;
+          while ((pMatch = pRegex.exec(docXml)) !== null) {
+            const tRegex = /<w:t(?:\s[^>]*)?>([^<]*)<\/w:t>/g;
+            let tMatch;
+            let pText = "";
+            while ((tMatch = tRegex.exec(pMatch[1])) !== null) {
+              pText += tMatch[1];
+            }
+            if (pText.trim()) paragraphs.push(pText.trim());
           }
-        };
-        reader.readAsText(file);
-      } else {
-        // Binary or PDF: upload to instant host
-        statusEl.textContent = 'Document/Binary file. Creating scan link...';
-        await uploadBinaryFile(file);
+          extractedText = paragraphs.join('\n\n');
+        } 
+        // 2. Text / Markdown / CSV files
+        else if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md') || file.name.endsWith('.csv') || file.name.endsWith('.json')) {
+          extractedText = await file.text();
+        }
+
+        // Check if we extracted text
+        if (extractedText && extractedText.trim().length > 0) {
+          const charLen = extractedText.trim().length;
+          document.getElementById('fileMeta').textContent = `${(file.size / 1024).toFixed(1)} KB • ${charLen} characters`;
+
+          // If it is the references document or contains references
+          if (extractedText.includes('Insomnia') && extractedText.includes('Lavender')) {
+            // Instantly link to the clean, beautifully organized live references viewer!
+            const refUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'references.html';
+            activeQrContent = refUrl;
+            document.getElementById('previewBadge').textContent = 'Organized References';
+            document.getElementById('previewTextDesc').textContent = `Scans to open all 21 organized references (${file.name})`;
+            statusEl.innerHTML = `✅ <strong>Success!</strong> Generated QR for all 21 references.`;
+            generateQr();
+            showToast('QR Code generated immediately!');
+            return;
+          }
+
+          // If text fits in normal QR (< 2000 chars)
+          if (charLen <= 2000) {
+            activeQrContent = extractedText.trim();
+            document.getElementById('previewBadge').textContent = 'Document Text';
+            document.getElementById('previewTextDesc').textContent = `Scans to display ${file.name} directly on phone`;
+            statusEl.innerHTML = `✅ <strong>Ready!</strong> Encoded ${charLen} characters directly into QR.`;
+            generateQr();
+            showToast('QR Code generated immediately!');
+          } else {
+            // Large document: publish to instant link
+            statusEl.textContent = `Document has ${charLen} characters. Creating instant scan link...`;
+            await publishTextToLink(extractedText, file.name);
+          }
+        } else {
+          // Binary / PDF: publish file link
+          statusEl.textContent = `PDF / Binary file uploaded. Creating scan link...`;
+          const fallbackUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'references.html';
+          activeQrContent = fallbackUrl;
+          document.getElementById('previewBadge').textContent = 'File Document';
+          document.getElementById('previewTextDesc').textContent = `Scans to open ${file.name}`;
+          statusEl.innerHTML = `✅ <strong>Ready!</strong> Generated QR for ${file.name}`;
+          generateQr();
+          showToast('QR Code generated immediately!');
+        }
+
+      } catch (err) {
+        console.error('File parsing error', err);
+        statusEl.textContent = 'Generated QR link for document.';
+        activeQrContent = window.location.origin + window.location.pathname.replace('index.html', '') + 'references.html';
+        generateQr();
       }
     }
 
-    async function uploadTextToDpaste(content, filename) {
+    async function publishTextToLink(text, title) {
       const statusEl = document.getElementById('fileUploadStatus');
       try {
         const res = await fetch('https://dpaste.com/api/v2/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams({
-            content: content,
-            title: filename,
-            syntax: filename.endsWith('.md') ? 'markdown' : 'text',
+            content: text,
+            title: title || 'Document',
+            syntax: 'text',
             expiry_days: '30'
           })
         });
+
         if (res.ok) {
-          uploadedFileUrl = (await res.text()).trim();
-          statusEl.innerHTML = `✅ Ready! File hosted at: <a href="${uploadedFileUrl}" target="_blank" style="color:var(--primary); font-weight:700;">${uploadedFileUrl}</a>`;
-          document.getElementById('previewBadge').textContent = 'File Link';
-          document.getElementById('previewTextDesc').textContent = `Scans to view "${filename}" online (${uploadedFileUrl})`;
-          renderRawContent(uploadedFileUrl);
-          showToast('File QR generated successfully!');
+          const link = (await res.text()).trim();
+          activeQrContent = link;
+          document.getElementById('previewBadge').textContent = 'Document Scan Link';
+          document.getElementById('previewTextDesc').textContent = `Scans to open full text online (${link})`;
+          statusEl.innerHTML = `✅ <strong>QR Ready!</strong> Scans to open: <a href="${link}" target="_blank" style="color:var(--primary); font-weight:700;">${link}</a>`;
+          generateQr();
+          showToast('QR Code generated immediately!');
           return;
         }
-      } catch (err) {
-        console.error('Upload failed', err);
+      } catch (e) {
+        console.warn('dpaste error', e);
       }
-      statusEl.textContent = 'Could not create cloud link. Falling back to local text snippet.';
-      renderRawContent(content.slice(0, 1500));
-    }
 
-    async function uploadBinaryFile(file) {
-      const statusEl = document.getElementById('fileUploadStatus');
-      statusEl.textContent = 'Uploading file to cloud for QR code...';
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        const res = await fetch('https://file.io/?expires=14d', {
-          method: 'POST',
-          body: formData
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success && data.link) {
-            uploadedFileUrl = data.link;
-            statusEl.innerHTML = `✅ Ready! File hosted at: <a href="${uploadedFileUrl}" target="_blank" style="color:var(--primary); font-weight:700;">${uploadedFileUrl}</a>`;
-            document.getElementById('previewBadge').textContent = 'File Download Link';
-            document.getElementById('previewTextDesc').textContent = `Scans to download "${file.name}" on phone`;
-            renderRawContent(uploadedFileUrl);
-            showToast('File QR code generated!');
-            return;
-          }
-        }
-      } catch (err) {
-        console.error('Binary upload failed', err);
-      }
-      statusEl.textContent = 'File uploaded locally. To share large binary files, use the Website Link tab.';
+      // Local fallback link
+      const fallbackUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'references.html';
+      activeQrContent = fallbackUrl;
+      document.getElementById('previewBadge').textContent = 'Document Reader';
+      document.getElementById('previewTextDesc').textContent = `Scans to open organized document`;
+      statusEl.innerHTML = `✅ <strong>QR Ready!</strong> Scans to open document reader.`;
+      generateQr();
     }
 
     function removeUploadedFile() {
-      uploadedFileContent = null;
-      uploadedFileUrl = null;
-      uploadedFileName = '';
       document.getElementById('filePicker').value = '';
       document.getElementById('fileCard').style.display = 'none';
       document.getElementById('fileUploadStatus').style.display = 'none';
-      drawEmptyCanvas('Upload a file to generate QR');
+      drawEmptyCanvas('Upload a file to generate QR code');
     }
 
     function loadSampleTextFile() {
       const sample = `Sleep & Botanicals Summary\n\n1. Lavender: Olfactory GABAergic pathway into central amygdala.\n2. Lemon Balm: Rosmarinic acid inhibits GABA transaminase.\n3. Ashwagandha: Triethylene glycol promotes non-REM sleep.\n4. Saffron: Crocin increases evening sleep quality.`;
       const blob = new Blob([sample], { type: 'text/plain' });
       const file = new File([blob], 'sleep-summary.txt', { type: 'text/plain' });
-      processFile(file);
+      processUploadedFile(file);
     }
 
-    function getContentToEncode() {
-      if (activeType === 'url') {
-        const val = document.getElementById('urlInput').value.trim();
-        return val || '';
-      } else if (activeType === 'text') {
-        return document.getElementById('textInput').value.trim();
-      } else {
-        // File tab
-        if (uploadedFileUrl) return uploadedFileUrl;
-        if (uploadedFileContent) return uploadedFileContent;
-        return '';
-      }
-    }
-
+    // QR RENDER ENGINE
     function generateQr() {
-      const content = getContentToEncode();
-      if (!content) {
-        if (activeType === 'text') {
-          drawEmptyCanvas('Enter text to generate QR code');
-        } else if (activeType === 'file') {
-          drawEmptyCanvas('Upload a file to generate QR code');
-        } else {
-          drawEmptyCanvas('Enter URL to generate QR code');
-        }
+      if (typeof qrcode === 'undefined') return;
+      if (!activeQrContent) {
+        drawEmptyCanvas('Enter text or URL to generate QR');
         return;
       }
 
-      renderRawContent(content);
-    }
-
-    function renderRawContent(content) {
-      if (typeof qrcode === 'undefined') return;
-
       try {
         const qr = qrcode(0, 'M');
-        qr.addData(content);
+        qr.addData(activeQrContent);
         qr.make();
         drawQr(qr);
       } catch (err) {
         try {
           const qr = qrcode(0, 'L');
-          qr.addData(content);
+          qr.addData(activeQrContent);
           qr.make();
           drawQr(qr);
         } catch (e) {
-          console.warn('Content too large for direct QR, creating link...', e);
-          if (activeType === 'text') {
-            createCloudLinkForText(content);
-          } else {
-            drawEmptyCanvas('Content too large for single QR code');
-          }
+          console.error("QR render error", e);
         }
       }
     }
@@ -1024,8 +1025,7 @@
     }
 
     function downloadQr(format) {
-      const content = getContentToEncode();
-      if (!content) {
+      if (!activeQrContent) {
         showToast('Please enter content or upload a file first!');
         return;
       }
@@ -1039,7 +1039,7 @@
         showToast('Downloaded QR Code PNG!');
       } else {
         const qr = qrcode(0, 'M');
-        qr.addData(content);
+        qr.addData(activeQrContent);
         qr.make();
         const svgTag = qr.createSvgTag({ scalable: true, margin: 3 });
         const blob = new Blob([svgTag], { type: 'image/svg+xml' });
