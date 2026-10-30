@@ -2,719 +2,354 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>QR Craft Studio — Turn Any Text Into An Organized Scannable Page</title>
-  <meta name="description" content="Paste any text, notes, citations, or letter. Instantly generate a beautifully organized mobile webpage and high-res QR code.">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickQR — Simple & Clean QR Code Generator</title>
+  <meta name="description" content="Generate normal QR codes for links, text, and notes with simple customization. Free, instant, and private.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  
-  <!-- Bundled vendor libraries with CDN fallbacks -->
-  <script src="./vendor/lz-string.min.js"></script>
-  <script>
-    if (typeof LZString === 'undefined') {
-      document.write('<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"><\/script>');
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <script src="./vendor/qrcode.js"></script>
   <script>
     if (typeof qrcode === 'undefined') {
       document.write('<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"><\/script>');
     }
   </script>
-
   <style>
     :root {
-      --bg: #0b0f19;
-      --card-bg: rgba(22, 30, 49, 0.78);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover: rgba(30, 41, 67, 0.9);
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
-      --text-sub: #cbd5e1;
-      --accent: #818cf8;
-      --accent-glow: rgba(129, 140, 248, 0.2);
-      --accent-rgb: 129, 140, 248;
-      --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 22px;
-      --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    [data-theme="light"] {
       --bg: #f8fafc;
-      --card-bg: rgba(255, 255, 255, 0.92);
-      --card-border: rgba(226, 232, 240, 0.9);
-      --card-hover: #ffffff;
+      --card: #ffffff;
+      --border: #e2e8f0;
       --text: #0f172a;
-      --text-muted: #64748b;
-      --text-sub: #334155;
-      --shadow-lg: 0 16px 32px -8px rgba(0, 0, 0, 0.08);
+      --muted: #64748b;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --radius: 14px;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0f19;
+        --card: #161e31;
+        --border: rgba(255, 255, 255, 0.09);
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.5);
+      }
     }
 
-    /* Color Palettes */
-    [data-palette="rose"] {
-      --accent: #f43f5e;
-      --accent-glow: rgba(244, 63, 94, 0.2);
-      --accent-rgb: 244, 63, 94;
-    }
-    [data-palette="lavender"] {
-      --accent: #a855f7;
-      --accent-glow: rgba(168, 85, 247, 0.2);
-      --accent-rgb: 168, 85, 247;
-    }
-    [data-palette="emerald"] {
-      --accent: #10b981;
-      --accent-glow: rgba(16, 185, 129, 0.2);
-      --accent-rgb: 16, 185, 129;
-    }
-    [data-palette="latte"] {
-      --accent: #d97706;
-      --accent-glow: rgba(217, 119, 6, 0.2);
-      --accent-rgb: 217, 119, 6;
-    }
-    [data-palette="slate"] {
-      --accent: #64748b;
-      --accent-glow: rgba(100, 116, 139, 0.2);
-      --accent-rgb: 100, 116, 139;
-    }
-    [data-palette="indigo"] {
-      --accent: #6366f1;
-      --accent-glow: rgba(99, 102, 241, 0.2);
-      --accent-rgb: 99, 102, 241;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.55;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(var(--accent-rgb), 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(var(--accent-rgb), 0.08) 0px, transparent 50%);
-      background-attachment: fixed;
-      transition: background 0.3s ease, color 0.3s ease;
+      line-height: 1.5;
+      padding: 2.5rem 1.25rem;
     }
 
-    /* Top Navigation */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.75rem;
-      border-bottom: 1px solid var(--card-border);
-      background: rgba(11, 15, 25, 0.7);
-      backdrop-filter: blur(16px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
     }
 
-    [data-theme="light"] .navbar {
-      background: rgba(248, 250, 252, 0.85);
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-      color: var(--text);
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
-    }
-
-    .brand-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, var(--accent), #ec4899);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.05rem;
-      box-shadow: 0 4px 12px var(--accent-glow);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .btn {
+    .logo-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.5rem 0.95rem;
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      border: 1px solid transparent;
-      font-family: inherit;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-muted);
-      border-color: var(--card-border);
-    }
-    .btn-ghost:hover {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #ffffff;
-      box-shadow: 0 4px 14px var(--accent-glow);
-    }
-    .btn-primary:hover {
-      filter: brightness(1.12);
-      transform: translateY(-1px);
-    }
-
-    /* Studio Layout */
-    .studio-container {
-      max-width: 1380px;
-      margin: 0 auto;
-      padding: 1.75rem 1.5rem 5rem;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 2rem;
-      align-items: start;
-    }
-
-    @media (max-width: 1024px) {
-      .studio-container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Left Panel: Form & Controls */
-    .editor-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      backdrop-filter: blur(14px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .panel-header {
-      margin-bottom: 1.5rem;
-    }
-    .panel-header h2 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.35rem;
-    }
-    .panel-header p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.82rem;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--primary);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 0.45rem;
+      margin-bottom: 0.75rem;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.4rem;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
     }
 
-    .form-input {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.22);
-      border: 1px solid var(--card-border);
+    /* Main Grid */
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+    @media (max-width: 820px) {
+      .app-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Card Box */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+    }
+
+    /* Tabs */
+    .tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 0.3rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      .tabs-bar { background: rgba(255, 255, 255, 0.05); }
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .tab-btn.active {
+      background: var(--card);
       color: var(--text);
-      padding: 0.75rem 0.95rem;
-      border-radius: var(--radius-sm);
-      font-size: 0.92rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Input Fields */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .quick-preset {
+      color: var(--primary);
+      cursor: pointer;
+      text-transform: none;
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+    .quick-preset:hover { text-decoration: underline; }
+
+    input[type="text"], textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
       font-family: inherit;
       outline: none;
-      transition: all 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    @media (prefers-color-scheme: dark) {
+      input[type="text"], textarea { background: rgba(0, 0, 0, 0.25); }
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    textarea {
+      height: 140px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .char-count {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+      text-align: right;
     }
 
-    [data-theme="light"] .form-input {
-      background: #ffffff;
-    }
-
-    .form-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-
-    /* Mode Selection Chips */
-    .mode-chips {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .mode-chip {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      padding: 0.65rem 0.75rem;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s ease;
-    }
-
-    .mode-chip:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-
-    .mode-chip.active {
-      background: var(--accent-glow);
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent);
-    }
-
-    .mode-chip-title {
-      font-size: 0.85rem;
+    /* Customization Section */
+    .section-title {
+      font-size: 0.9rem;
       font-weight: 700;
-      color: var(--text);
+      margin-bottom: 0.85rem;
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
-    .mode-chip-desc {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 0.2rem;
-    }
 
-    /* Palette Selection */
-    .palette-row {
+    /* Color Pickers */
+    .custom-row {
       display: flex;
-      gap: 0.55rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.25rem;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
     }
-
-    .palette-btn {
-      width: 32px;
-      height: 32px;
+    .color-swatches {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .color-dot {
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       border: 2px solid transparent;
       cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-      position: relative;
+      transition: transform 0.15s ease;
     }
-    .palette-btn:hover {
-      transform: scale(1.15);
+    .color-dot:hover { transform: scale(1.15); }
+    .color-dot.active {
+      border-color: var(--text);
+      box-shadow: 0 0 0 2px var(--card);
     }
-    .palette-btn.active {
-      border-color: #ffffff;
-      box-shadow: 0 0 0 2px var(--accent);
+    .color-native {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      padding: 0;
+      cursor: pointer;
+      background: none;
     }
 
-    /* Quick Pre-load templates */
-    .templates-bar {
+    /* Style options (Square, Round, Dots) */
+    .chip-group {
       display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      margin-bottom: 0.65rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
     }
-    .templates-label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    .chip-btn {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
       font-weight: 600;
-      margin-right: 0.2rem;
-    }
-    .template-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: var(--text-sub);
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-      font-size: 0.75rem;
       cursor: pointer;
       transition: all 0.15s ease;
-    }
-    .template-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      color: var(--text);
-    }
-
-    /* Text Area */
-    .textarea-wrap {
-      position: relative;
-    }
-    .form-textarea {
-      width: 100%;
-      height: 240px;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 0.85rem;
-      border-radius: var(--radius-sm);
       font-family: inherit;
-      font-size: 0.9rem;
-      line-height: 1.5;
-      resize: vertical;
-      outline: none;
-      transition: all 0.2s ease;
     }
-    [data-theme="light"] .form-textarea {
-      background: #ffffff;
+    @media (prefers-color-scheme: dark) {
+      .chip-btn { background: rgba(255, 255, 255, 0.05); }
     }
-    .form-textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .text-counter {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 0.35rem;
-      padding: 0 0.25rem;
-    }
-
-    /* Actions Bar */
-    .actions-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.6rem;
-      margin-top: 1.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--card-border);
-    }
-
-    /* Right Panel: Phone Mockup Preview */
-    .preview-column {
-      position: sticky;
-      top: 5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .preview-header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      max-width: 410px;
-      margin-bottom: 0.85rem;
-    }
-
-    .preview-status {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 8px #10b981;
-      display: inline-block;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.9); }
-    }
-
-    /* Phone Device Frame */
-    .phone-mockup {
-      width: 100%;
-      max-width: 410px;
-      height: 720px;
-      background: #000000;
-      border-radius: 46px;
-      border: 8px solid #1e293b;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Dynamic Island */
-    .phone-notch {
-      width: 110px;
-      height: 24px;
-      background: #000000;
-      border-radius: 20px;
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 10px;
-    }
-    .notch-camera {
-      width: 10px;
-      height: 10px;
-      background: #0b1329;
-      border-radius: 50%;
-      margin-left: auto;
-    }
-
-    /* Phone Screen Scrollable Area */
-    .phone-screen {
-      flex: 1;
-      overflow-y: auto;
-      background: var(--bg);
-      color: var(--text);
-      padding: 3rem 1.15rem 2rem;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-      transition: background 0.3s ease;
-    }
-
-    /* Preview Render Components */
-    .preview-hero {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .preview-badge {
-      display: inline-block;
-      background: var(--accent-glow);
-      color: var(--accent);
-      border: 1px solid rgba(var(--accent-rgb), 0.3);
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-    .preview-title {
-      font-size: 1.35rem;
-      font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 0.35rem;
-      letter-spacing: -0.02em;
-    }
-    .preview-subtitle {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    /* Card list inside phone */
-    .phone-items {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .p-item-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      padding: 0.95rem;
-      backdrop-filter: blur(8px);
-    }
-    .p-item-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.4rem;
-    }
-    .p-item-index {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      font-weight: 700;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-    }
-    .p-item-cat {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--accent-glow);
-      padding: 0.15rem 0.45rem;
-      border-radius: 9999px;
-    }
-    .p-item-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      line-height: 1.35;
-      margin-bottom: 0.35rem;
-    }
-    .p-item-meta {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-    .p-item-actions {
-      display: flex;
-      gap: 0.4rem;
-    }
-    .p-btn-sm {
-      background: var(--accent);
+    .chip-btn:hover { color: var(--text); border-color: var(--muted); }
+    .chip-btn.active {
+      background: var(--primary);
       color: #ffffff;
-      padding: 0.3rem 0.6rem;
+      border-color: var(--primary);
+    }
+
+    /* Right Preview Column */
+    .preview-card {
+      text-align: center;
+      position: sticky;
+      top: 2rem;
+    }
+    .qr-frame {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 18px;
+      display: inline-block;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.25rem;
+    }
+    #qrCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .preview-info {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      word-break: break-all;
+    }
+    .preview-type-badge {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
       border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-decoration: none;
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      .preview-type-badge { background: rgba(255, 255, 255, 0.1); }
+    }
+
+    /* Action Buttons */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
-    }
-    .p-btn-copy {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text);
-      border: 1px solid var(--card-border);
-    }
-
-    /* Checklist Style */
-    .checklist-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-      padding: 0.65rem 0.8rem;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      user-select: none;
-    }
-    .check-box {
-      width: 18px;
-      height: 18px;
-      border-radius: 5px;
-      border: 2px solid var(--card-border);
-      margin-top: 2px;
-      display: flex;
-      align-items: center;
       justify-content: center;
+      gap: 0.5rem;
+      border: 1px solid transparent;
+      font-family: inherit;
       transition: all 0.2s ease;
-      flex-shrink: 0;
     }
-    .checklist-row.checked .check-box {
-      background: var(--accent);
-      border-color: var(--accent);
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
     }
-    .checklist-row.checked .check-text {
-      text-decoration: line-through;
-      color: var(--text-muted);
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
     }
-    .check-text {
-      font-size: 0.85rem;
-      line-height: 1.4;
+    .btn-secondary {
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--text);
+      border-color: var(--border);
     }
-
-    /* Letter Style */
-    .letter-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem 1.4rem;
-      font-family: 'Playfair Display', serif;
-      line-height: 1.8;
-      font-size: 0.95rem;
-      position: relative;
+    @media (prefers-color-scheme: dark) {
+      .btn-secondary { background: rgba(255, 255, 255, 0.05); }
     }
-    .letter-date {
-      font-size: 0.78rem;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--accent);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-    }
-    .letter-sign {
-      margin-top: 1.5rem;
-      font-style: italic;
-      color: var(--text-muted);
-    }
-
-    /* QR Code Quick Badge under phone */
-    .preview-qr-dock {
-      margin-top: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 0.85rem 1.25rem;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
-      max-width: 410px;
-      width: 100%;
-    }
-    .dock-qr-img {
-      width: 64px;
-      height: 64px;
-      background: #ffffff;
-      padding: 4px;
-      border-radius: 8px;
-      display: block;
-      flex-shrink: 0;
-    }
-    .dock-info {
-      flex: 1;
-    }
-    .dock-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-    .dock-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    /* Recipient Standalone Scanned View */
-    .recipient-view {
-      display: none;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 2rem 1.25rem 5rem;
-    }
-    .recipient-view.active {
-      display: block;
+    .btn-secondary:hover {
+      background: rgba(0, 0, 0, 0.08);
+      border-color: var(--muted);
     }
 
     /* Toast */
@@ -724,814 +359,367 @@
       left: 50%;
       transform: translateX(-50%) translateY(100px);
       background: #0f172a;
-      color: #f8fafc;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
       padding: 0.75rem 1.4rem;
       border-radius: 9999px;
       font-size: 0.88rem;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: var(--shadow-lg);
-      z-index: 999;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 999;
+      pointer-events: none;
     }
     .toast.show {
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
 
-    /* QR Code Modal */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.25rem;
-      z-index: 200;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-    }
-    .modal-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .modal-box {
-      background: var(--bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      max-width: 440px;
-      width: 100%;
+    /* Footer */
+    footer {
       text-align: center;
-      box-shadow: var(--shadow-lg);
+      margin-top: 3.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
     }
-    .modal-qr-preview {
-      width: 250px;
-      height: 250px;
-      background: #ffffff;
-      padding: 14px;
-      border-radius: var(--radius-md);
-      margin: 1.25rem auto;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      display: block;
-    }
-  </style>
-</head>
-<body data-palette="rose" data-theme="dark">
-
-  <!-- Main Top Bar -->
-  <nav class="navbar">
-    <a href="index.html" class="brand">
-      <div class="brand-icon">✨</div>
-      <span>QR Craft Studio</span>
-    </a>
-    <div class="nav-actions">
-      <a href="sleep-references.html" class="btn btn-ghost" title="View the 21 Sleep Studies References page">
-        <span>😴 Sleep Demo</span>
-      </a>
-      <button class="btn btn-ghost" id="themeBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
-        🌙
-      </button>
-      <button class="btn btn-primary" onclick="showQrModal()">
-        <span>📲 Get QR Code</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- STUDIO CREATOR MODE -->
-  <div class="studio-container" id="studioContainer">
-    <!-- Left Column: Controls & Input -->
-    <div class="editor-card">
-      <div class="panel-header">
-        <h2>Craft Your Scannable Page</h2>
-        <p>Paste any text, citations, or notes. We'll turn it into an organized mobile experience with an instant QR code.</p>
-      </div>
-
-      <!-- Mode Selector -->
-      <div class="form-group">
-        <label class="form-label">Formatting Mode</label>
-        <div class="mode-chips">
-          <div class="mode-chip active" data-mode="citations" onclick="setMode('citations')">
-            <div class="mode-chip-title">📚 Citations</div>
-            <div class="mode-chip-desc">Auto-parses references, journals & DOIs</div>
-          </div>
-          <div class="mode-chip" data-mode="notes" onclick="setMode('notes')">
-            <div class="mode-chip-title">📝 Study Notes</div>
-            <div class="mode-chip-desc">Sections, cards & highlighted takeaways</div>
-          </div>
-          <div class="mode-chip" data-mode="checklist" onclick="setMode('checklist')">
-            <div class="mode-chip-title">✅ Checklist</div>
-            <div class="mode-chip-desc">Interactive checkable items</div>
-          </div>
-          <div class="mode-chip" data-mode="letter" onclick="setMode('letter')">
-            <div class="mode-chip-title">💌 Love Note</div>
-            <div class="mode-chip-desc">Warm aesthetic letter & quote cards</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Theme / Color Swatches -->
-      <div class="form-group">
-        <label class="form-label">Color Theme</label>
-        <div class="palette-row">
-          <button class="palette-btn active" data-p="rose" style="background: #f43f5e;" title="Rose Petal" onclick="setPalette('rose')"></button>
-          <button class="palette-btn" data-p="lavender" style="background: #a855f7;" title="Lavender Dreams" onclick="setPalette('lavender')"></button>
-          <button class="palette-btn" data-p="emerald" style="background: #10b981;" title="Emerald Herb" onclick="setPalette('emerald')"></button>
-          <button class="palette-btn" data-p="latte" style="background: #d97706;" title="Warm Latte" onclick="setPalette('latte')"></button>
-          <button class="palette-btn" data-p="indigo" style="background: #6366f1;" title="Neon Indigo" onclick="setPalette('indigo')"></button>
-          <button class="palette-btn" data-p="slate" style="background: #64748b;" title="Slate Clean" onclick="setPalette('slate')"></button>
-        </div>
-      </div>
-
-      <!-- Document Metadata -->
-      <div class="grid-2 form-group">
-        <div>
-          <label class="form-label">Document Title</label>
-          <input type="text" id="docTitle" class="form-input" placeholder="e.g. Sleep & Insomnia Research" value="Herbal Sleep Interventions" oninput="updateLive()">
-        </div>
-        <div>
-          <label class="form-label">Subtitle / Subheading</label>
-          <input type="text" id="docSubtitle" class="form-input" placeholder="e.g. Curated Literature & Key Findings" value="Curated Studies & Monograph References" oninput="updateLive()">
-        </div>
-      </div>
-
-      <!-- Quick Pre-load Templates -->
-      <div class="templates-bar">
-        <span class="templates-label">Sample Templates:</span>
-        <button class="template-btn" onclick="loadTemplate('sleep')">😴 Sleep Studies</button>
-        <button class="template-btn" onclick="loadTemplate('notes')">📚 Exam Notes</button>
-        <button class="template-btn" onclick="loadTemplate('checklist')">✅ Packing Checklist</button>
-        <button class="template-btn" onclick="loadTemplate('letter')">💌 Sweet Note</button>
-        <button class="template-btn" onclick="clearText()">Clear</button>
-      </div>
-
-      <!-- Text Area -->
-      <div class="form-group">
-        <label class="form-label">Paste Your Content</label>
-        <div class="textarea-wrap">
-          <textarea id="rawText" class="form-textarea" placeholder="Paste your references, notes, study material, or message here..." oninput="updateLive()"></textarea>
-        </div>
-        <div class="text-counter">
-          <span id="charCount">0 characters • 0 items</span>
-          <span>Encodes directly into QR & share link</span>
-        </div>
-      </div>
-
-      <!-- Actions Deck -->
-      <div class="actions-grid">
-        <button class="btn btn-primary" onclick="showQrModal()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          <span>Generate QR</span>
-        </button>
-        <button class="btn btn-ghost" onclick="copyShareableUrl()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-          <span>Copy Share Link</span>
-        </button>
-        <button class="btn btn-ghost" onclick="downloadQrPng()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span>Download PNG</span>
-        </button>
-        <button class="btn btn-ghost" onclick="downloadStandaloneHtml()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-          <span>Save HTML</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Right Column: Interactive Phone Mockup Preview -->
-    <div class="preview-column">
-      <div class="preview-header-bar">
-        <span class="preview-status">
-          <span class="live-dot"></span>
-          Live Mobile Preview
-        </span>
-        <span style="font-size: 0.78rem; color: var(--text-muted);">Recipient's View When Scanned</span>
-      </div>
-
-      <div class="phone-mockup">
-        <!-- Dynamic Island -->
-        <div class="phone-notch">
-          <div class="notch-camera"></div>
-        </div>
-
-        <!-- Phone Inner Screen -->
-        <div class="phone-screen" id="phoneScreen">
-          <!-- Dynamically Rendered Preview -->
-        </div>
-      </div>
-
-      <!-- Quick QR Code Dock below Phone -->
-      <div class="preview-qr-dock">
-        <canvas id="dockQrCanvas" class="dock-qr-img"></canvas>
-        <div class="dock-info">
-          <div class="dock-title">Ready to Scan</div>
-          <div class="dock-sub">Scan with any phone camera to view live</div>
-        </div>
-        <button class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;" onclick="showQrModal()">
-          View Full QR
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- RECIPIENT STANDALONE SCANNED VIEW (when opened via QR code #d=...) -->
-  <main class="recipient-view" id="recipientView">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-      <a href="index.html" class="brand" style="font-size: 1rem;">
-        <div class="brand-icon" style="width: 26px; height: 26px; font-size: 0.85rem;">✨</div>
-        <span>QR Craft</span>
-      </a>
-      <div style="display: flex; gap: 0.5rem;">
-        <button class="btn btn-ghost" onclick="toggleTheme()">🌙</button>
-        <button class="btn btn-ghost" onclick="copyCurrentScannedUrl()">🔗 Share</button>
-      </div>
-    </div>
-
-    <div class="preview-hero" style="text-align: left; margin-bottom: 2rem;">
-      <span class="preview-badge" id="recBadge">Organized Reading View</span>
-      <h1 id="recTitle" style="font-size: 2.1rem; font-weight: 800; line-height: 1.25; margin-bottom: 0.5rem; letter-spacing: -0.025em;">Document Title</h1>
-      <p id="recSubtitle" style="color: var(--text-muted); font-size: 1.05rem;">Subtitle</p>
-    </div>
-
-    <div id="recContent" class="phone-items">
-      <!-- Injected -->
-    </div>
-
-    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--card-border); text-align: center; color: var(--text-muted); font-size: 0.85rem;">
-      <p>Scanned via QR Code • Powered by <strong>QR Craft Studio</strong></p>
-      <p style="margin-top: 0.5rem;">
-        <a href="index.html" style="color: var(--accent); text-decoration: none; font-weight: 600;">Create your own scannable QR page →</a>
-      </p>
-    </footer>
-  </main>
-
-  <!-- Full QR Modal -->
-  <div class="modal-backdrop" id="qrModal" onclick="closeQrModal(event)">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.35rem;">Scan to Open on Mobile</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem;">Point any smartphone camera at this code to view your organized document instantly.</p>
-      
-      <canvas id="modalQrCanvas" class="modal-qr-preview"></canvas>
-      
-      <div style="display: flex; gap: 0.6rem; justify-content: center; margin-top: 1.25rem;">
-        <button class="btn btn-primary" onclick="downloadQrPng()">
-          Download PNG
-        </button>
-        <button class="btn btn-ghost" onclick="copyShareableUrl()">
-          Copy Link
-        </button>
-      </div>
-      <button class="btn btn-ghost" style="margin-top: 1rem; width: 100%; justify-content: center;" onclick="closeQrModal()">
-        Done
-      </button>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-    <span id="toastMsg">Action completed!</span>
-  </div>
-
-  <script>
-    // State
-    let currentMode = 'citations';
-    let currentPalette = 'rose';
-    let qrRenderTimer = null;
-
-    const SAMPLE_TEMPLATES = {
-      sleep: `References:
-[1] Cleveland Clinic. (2023, February 13). Insomnia. Cleveland Clinic. https://my.clevelandclinic.org/health/diseases/12119-insomnia
-[2] Lieberman, J. A. (2007). Update on the safety considerations in the management of insomnia with hypnotics: Incorporating modified-release formulations into primary care. Primary Care Companion to the Journal of Clinical Psychiatry, 9(1), 25–31. PubMed Central. https://doi.org/10.4088/pcc.v09n0105
-[3] Ji Won Yeom, & Cho, C.-H. (2024). Herbal and natural supplements for improving sleep: A literature review. Psychiatry Investigation, 21(8). https://doi.org/10.30773/pi.2024.0121
-[4] Buchbauer, G., Jirovetz, L., & Jäger, W. (1991). Aromatherapy: Evidence for sedative effects of the essential oil of lavender after inhalation. Zeitschrift Für Naturforschung C, 46(11–12), 1067–1072. https://doi.org/10.1515/znc-1991-11-1223
-[5] Ren, Y.-L., Chu, W.-W., Yang, X.-W., Xin, Le, Gao, J.-X., Yan, G.-Z., Wang, C., Chen, Y.-N., Xie, J.-F., Spruyt, K., Lin, J.-S., Hou, Y.-P., & Shao, Y.-F. (2024). Lavender improves sleep through olfactory perception and GABAergic neurons of the central amygdala. Journal of Ethnopharmacology, 337, 118942. https://doi.org/10.1016/j.jep.2024.118942
-[6] Koulivand, P. H., Khaleghi Ghadiri, M., & Gorji, A. (2013). Lavender and the nervous system. Evidence-Based Complementary and Alternative Medicine, 2013(681304), 1–10. https://doi.org/10.1155/2013/681304
-[7] sahu, L., Kumar Nema, R., Patel, S., Suchita Wamankar, & Patel, V. (2025). The science behind lavender in insomnia natural sleep aid: A comprehensive review. International Journal of Scientific Research and Technology, 03(01), 7–13. https://doi.org/10.5281/zenodo.14789673
-[8] nccih. (2020, August). Lavender. Nccih. https://www.nccih.nih.gov/health/lavender
-[9] https://www.facebook.com/Drugscom. (2019). Lavender. Drugs.Com; Drugs.com. https://www.drugs.com/mtm/lavender.html
-[10] Awad, R., Muhammad, A., Durst, T., Trudeau, V. L., & Arnason, J. T. (2009). Bioassay‐guided fractionation of lemon balm (Melissa officinalisL.) Using anin vitromeasure of GABA transaminase activity. Phytotherapy Research, 23(8), 1075–1081. https://doi.org/10.1002/ptr.2712
-[11] Anonymous. (2018, September 17). Melissae folium - European Medicines Agency. European Medicines Agency. https://www.ema.europa.eu/en/medicines/herbal/melissae-folium
-[12] Lemon balm: Uses, side effects, interactions, pictures, warnings & dosing - WebMD. (2025). Webmd.Com. https://www.webmd.com/vitamins-supplements/lemon-balm
-[13] Sleep disorders, anxiety calmed with Lemon Balm. (2009, March 9). Psychiatry Advisor. https://www.psychiatryadvisor.com/features/sleep-disorders-anxiety-calmed-with-lemon-balm/
-[14] National Institutes of Health. (2023, October 24). Office of Dietary Supplements - Ashwagandha: Is It Helpful for stress, anxiety, or sleep? Ods.Od.Nih.Gov. https://ods.od.nih.gov/factsheets/Ashwagandha-HealthProfessional/
-[15] Kaushik, M. K., Kaul, S. C., Wadhwa, R., Yanagisawa, M., & Urade, Y. (2017). Triethylene glycol, an active component of Ashwagandha (Withania somnifera) leaves, is responsible for sleep induction. PLOS ONE, 12(2), e0172508. https://doi.org/10.1371/journal.pone.0172508
-[16] Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D. (2019). Efficacy and safety of ashwagandha (withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study. Cureus, 11(9). https://doi.org/10.7759/cureus.5797
-[17] National Center for Complementary and Integrative Health. (2023, March). Ashwagandha. Nccih. https://www.nccih.nih.gov/health/ashwagandha
-[18] Lopresti, A. L., Smith, S. J., Metse, A. P., & Drummond, P. D. (2020). Effects of saffron on sleep quality in healthy adults with self-reported poor sleep: A randomized, double-blind, placebo-controlled trial. Journal of Clinical Sleep Medicine, 16(6). https://doi.org/10.5664/jcsm.8376
-[19] Griffin, R. M. (n.d.). Saffron: Uses and risks. WebMD. Retrieved October 29, 2026, from https://www.webmd.com/vitamins-and-supplements/saffron-uses-and-risks
-[20] Wani, K. K. (2026, March 27). Saffron drug interactions: 7 Medications to never mix with Kesar. Kashmiril. https://kashmiril.com/blogs/journal/saffron-drug-interactions
-[21] Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D. (2019). Efficacy and safety of ashwagandha (withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study. Cureus, 11(9). https://doi.org/10.7759/cureus.5797`,
-      notes: `🌿 Phytochemicals & Neurobiology:
-- GABA Transaminase Inhibition: Rosmarinic acid prevents enzymatic degradation of GABA.
-- Olfactory Pathway: Linalool inhalations act through olfactory bulb directly into amygdala.
-- TEG (Triethylene Glycol): Active sleep-inducing fraction in Ashwagandha leaves.
-
-🔬 Clinical Trial Endpoints:
-- Sleep Onset Latency (SOL): Decreased by average 18 minutes in randomized trials.
-- Sleep Efficiency Index: Improved from 74% to 88% across 6-week intervention.
-- Melatonin Synthesis: Saffron supplementation increased salivary evening melatonin.
-
-⚠️ Crucial Safety & Drug Interactions:
-- Avoid combining Saffron in high doses with SSRIs due to serotonergic additive effects.
-- Lemon balm may mildly interfere with thyroid hormone absorption.`,
-      checklist: `Pack passport and national ID
-Review boarding passes in Apple Wallet
-Pack sleep essentials (Lavender roll-on, sleep mask, earplugs)
-Bring university research notes & notebook
-MacBook Pro charger and universal adapter
-Camera and spare memory cards
-Pick up house keys and lock windows`,
-      letter: `To the most wonderful person in the world,
-
-Just a little reminder of how proud I am of you. Every late night you spend studying and working hard inspires me more than words can say.
-
-Never forget to take care of yourself, get some good rest tonight, and remember that I am always here cheering you on every single step of the way.
-
-With all my love and admiration,
-Always yours ❤️`
-    };
-
-    // Mode Switching
-    function setMode(mode) {
-      currentMode = mode;
-      document.querySelectorAll('.mode-chip').forEach(c => {
-        c.classList.toggle('active', c.dataset.mode === mode);
-      });
-      updateLive();
-    }
-
-    // Palette Switching
-    function setPalette(pal) {
-      currentPalette = pal;
-      document.body.setAttribute('data-palette', pal);
-      document.querySelectorAll('.palette-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.p === pal);
-      });
-      renderQrCodes();
-    }
-
-    // Load Template
-    function loadTemplate(key) {
-      const titles = {
-        sleep: { title: "Herbal Sleep Interventions", sub: "21 Scientific Studies & Monograph References", mode: "citations", pal: "lavender" },
-        notes: { title: "Neurobiology & Sleep Science", sub: "Key Principles, Mechanisms & Safety Warnings", mode: "notes", pal: "emerald" },
-        checklist: { title: "Travel & Study Checklist", sub: "Things to complete before heading out", mode: "checklist", pal: "indigo" },
-        letter: { title: "A Little Note For You", sub: "For my favorite person in the world", mode: "letter", pal: "rose" }
-      };
-
-      const meta = titles[key];
-      if (meta) {
-        document.getElementById('docTitle').value = meta.title;
-        document.getElementById('docSubtitle').value = meta.sub;
-        setMode(meta.mode);
-        setPalette(meta.pal);
-      }
-      document.getElementById('rawText').value = SAMPLE_TEMPLATES[key] || '';
-      updateLive();
-    }
-
-    function clearText() {
-      document.getElementById('rawText').value = '';
-      updateLive();
-    }
-
-    // Parse Citations Helper
-    function parseCitations(text) {
-      const lines = text.split('\n').filter(l => l.trim().length > 0);
-      const items = [];
-      let currentItem = null;
-
-      lines.forEach(line => {
-        const trimmed = line.trim();
-        if (trimmed.toLowerCase() === 'references:' || trimmed.toLowerCase() === 'bibliography:') return;
-
-        // Check if starts with index like [1] or 1. or (1)
-        const match = trimmed.match(/^\[?(\d+)\]?[\.\s]+(.*)/);
-        if (match) {
-          if (currentItem) items.push(currentItem);
-          currentItem = { index: match[1], raw: match[2] };
-        } else if (currentItem) {
-          currentItem.raw += " " + trimmed;
-        } else {
-          // If no leading number, treat line as item
-          items.push({ index: items.length + 1, raw: trimmed });
-        }
-      });
-      if (currentItem) items.push(currentItem);
-
-      // Parse structured fields from raw string
-      return items.map(it => {
-        const urlMatch = it.raw.match(/https?:\/\/[^\s]+/);
-        const url = urlMatch ? urlMatch[0].replace(/[,\.]$/, '') : null;
-        let cleanText = it.raw;
-
-        // Determine category based on keywords
-        let cat = "Reference";
-        const lower = cleanText.toLowerCase();
-        if (lower.includes('lavender')) cat = "Lavender";
-        else if (lower.includes('lemon balm') || lower.includes('melissa')) cat = "Lemon Balm";
-        else if (lower.includes('ashwagandha') || lower.includes('withania')) cat = "Ashwagandha";
-        else if (lower.includes('saffron')) cat = "Saffron";
-        else if (lower.includes('insomnia') || lower.includes('hypnotics') || lower.includes('cleveland')) cat = "Sleep Science";
-
-        // Try extracting year (e.g. (2024))
-        const yearMatch = cleanText.match(/\((19\d\d|20\d\d)[^\)]*\)/);
-        const year = yearMatch ? yearMatch[1] : '';
-
-        // Extract author part before year
-        let authors = '';
-        if (yearMatch) {
-          const parts = cleanText.split(yearMatch[0]);
-          authors = parts[0].trim().replace(/\.$/, '');
-        }
-
-        return {
-          id: it.index,
-          title: cleanText,
-          authors: authors || 'Study Citation',
-          year: year || 'Clinical',
-          category: cat,
-          url: url,
-          raw: it.raw
-        };
-      });
-    }
-
-    // Live Render
-    function updateLive() {
-      const title = document.getElementById('docTitle').value.trim() || 'Untitled Document';
-      const subtitle = document.getElementById('docSubtitle').value.trim() || 'Created with QR Craft';
-      const text = document.getElementById('rawText').value;
-
-      document.getElementById('charCount').textContent = `${text.length} characters • Mode: ${currentMode}`;
-
-      const phoneScreen = document.getElementById('phoneScreen');
-      let html = `
-        <div class="preview-hero">
-          <span class="preview-badge">${escapeHtml(currentMode.toUpperCase())}</span>
-          <div class="preview-title">${escapeHtml(title)}</div>
-          <div class="preview-subtitle">${escapeHtml(subtitle)}</div>
-        </div>
-      `;
-
-      if (currentMode === 'citations') {
-        const citations = parseCitations(text);
-        if (citations.length === 0) {
-          html += `<div style="text-align: center; color: var(--text-muted); padding: 2rem 0; font-size: 0.85rem;">No citations entered yet. Paste references above or click a template!</div>`;
-        } else {
-          html += `<div class="phone-items">`;
-          citations.forEach(c => {
-            html += `
-              <div class="p-item-card">
-                <div class="p-item-top">
-                  <span class="p-item-index">[${c.id}]</span>
-                  <span class="p-item-cat">${escapeHtml(c.category)}</span>
-                </div>
-                <div class="p-item-title">${escapeHtml(c.title)}</div>
-                ${c.year ? `<div class="p-item-meta">Year: ${c.year}</div>` : ''}
-                <div class="p-item-actions">
-                  ${c.url ? `
-                    <a href="${c.url}" target="_blank" class="p-btn-sm">
-                      <span>Open Link</span>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    </a>
-                  ` : ''}
-                  <button class="p-btn-sm p-btn-copy" onclick="copySnippet('${encodeURIComponent(c.raw)}')">
-                    <span>Copy</span>
-                  </button>
-                </div>
-              </div>
-            `;
-          });
-          html += `</div>`;
-        }
-      } else if (currentMode === 'checklist') {
-        const lines = text.split('\n').filter(l => l.trim().length > 0);
-        html += `<div class="phone-items">`;
-        lines.forEach((line, idx) => {
-          html += `
-            <div class="checklist-row" onclick="this.classList.toggle('checked')">
-              <div class="check-box">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <span class="check-text">${escapeHtml(line)}</span>
-            </div>
-          `;
-        });
-        html += `</div>`;
-      } else if (currentMode === 'letter') {
-        html += `
-          <div class="letter-card">
-            <div class="letter-date">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
-            <div style="white-space: pre-wrap;">${escapeHtml(text || 'Write your heartfelt message here...')}</div>
-          </div>
-        `;
-      } else {
-        // Notes / Structured
-        const paragraphs = text.split('\n\n').filter(p => p.trim().length > 0);
-        html += `<div class="phone-items">`;
-        paragraphs.forEach(p => {
-          html += `
-            <div class="p-item-card" style="line-height: 1.6; white-space: pre-wrap;">
-              ${escapeHtml(p)}
-            </div>
-          `;
-        });
-        html += `</div>`;
-      }
-
-      phoneScreen.innerHTML = html;
-
-      // Debounce QR regeneration for smooth typing
-      clearTimeout(qrRenderTimer);
-      qrRenderTimer = setTimeout(renderQrCodes, 300);
-    }
-
-    // Build Payload for Sharing
-    function buildPayload() {
-      const obj = {
-        t: document.getElementById('docTitle').value.trim(),
-        s: document.getElementById('docSubtitle').value.trim(),
-        m: currentMode,
-        p: currentPalette,
-        c: document.getElementById('rawText').value
-      };
-      const json = JSON.stringify(obj);
-      if (typeof LZString !== 'undefined') {
-        return LZString.compressToEncodedURIComponent(json);
-      }
-      return encodeURIComponent(json);
-    }
-
-    function getShareableUrl() {
-      // Check if it's the exact Sleep references template
-      const isSleep = document.getElementById('docTitle').value.includes('Sleep') && document.getElementById('rawText').value.includes('Cleveland Clinic');
-      if (isSleep && window.location.pathname.includes('qr-craft')) {
-        return window.location.origin + window.location.pathname.replace('index.html', '') + 'sleep-references.html';
-      }
-      const hash = buildPayload();
-      const base = window.location.origin + window.location.pathname;
-      return base + '#d=' + hash;
-    }
-
-    // Render QR Codes to Canvases
-    function renderQrCodes() {
-      if (typeof qrcode === 'undefined') return;
-      const url = getShareableUrl();
-      
-      try {
-        // Auto-detect version
-        const qr = qrcode(0, 'M');
-        qr.addData(url);
-        qr.make();
-
-        // Draw on Dock canvas
-        const dockCanvas = document.getElementById('dockQrCanvas');
-        drawQrToCanvas(qr, dockCanvas, 64, getPaletteHex(currentPalette));
-
-        // Draw on Modal canvas
-        const modalCanvas = document.getElementById('modalQrCanvas');
-        drawQrToCanvas(qr, modalCanvas, 250, getPaletteHex(currentPalette));
-      } catch (e) {
-        console.warn('Payload large for standard QR, falling back to L error correction', e);
-        try {
-          const qr = qrcode(0, 'L');
-          qr.addData(url);
-          qr.make();
-          drawQrToCanvas(qr, document.getElementById('dockQrCanvas'), 64, getPaletteHex(currentPalette));
-          drawQrToCanvas(qr, document.getElementById('modalQrCanvas'), 250, getPaletteHex(currentPalette));
-        } catch (err) {
-          console.error('Cannot generate QR', err);
-        }
-      }
-    }
-
-    function getPaletteHex(p) {
-      const map = {
-        rose: '#f43f5e',
-        lavender: '#9333ea',
-        emerald: '#059669',
-        latte: '#d97706',
-        indigo: '#4f46e5',
-        slate: '#334155'
-      };
-      return map[p] || '#4f46e5';
-    }
-
-    function drawQrToCanvas(qr, canvas, size, darkColor) {
-      const count = qr.getModuleCount();
-      canvas.width = size * 2; // high-dpi
-      canvas.height = size * 2;
-      canvas.style.width = size + 'px';
-      canvas.style.height = size + 'px';
-      const ctx = canvas.getContext('2d');
-      ctx.imageSmoothingEnabled = false;
-
-      // Background
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const margin = 8;
-      const cellSize = (canvas.width - margin * 2) / count;
-
-      ctx.fillStyle = darkColor;
-      for (let r = 0; r < count; r++) {
-        for (let c = 0; c < count; c++) {
-          if (qr.isDark(r, c)) {
-            ctx.fillRect(
-              Math.round(margin + c * cellSize),
-              Math.round(margin + r * cellSize),
-              Math.ceil(cellSize),
-              Math.ceil(cellSize)
-            );
-          }
-        }
-      }
-    }
-
-    // Modal Control
-    function showQrModal() {
-      renderQrCodes();
-      document.getElementById('qrModal').classList.add('open');
-    }
-    function closeQrModal() {
-      document.getElementById('qrModal').classList.remove('open');
-    }
-
-    // Export Helpers
-    function copyShareableUrl() {
-      const url = getShareableUrl();
-      navigator.clipboard.writeText(url).then(() => {
-        showToast('Share link copied to clipboard!');
-      });
-    }
-
-    function copyCurrentScannedUrl() {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        showToast('Link copied!');
-      });
-    }
-
-    function copySnippet(encoded) {
-      const raw = decodeURIComponent(encoded);
-      navigator.clipboard.writeText(raw).then(() => {
-        showToast('Citation copied!');
-      });
-    }
-
-    function downloadQrPng() {
-      const canvas = document.getElementById('modalQrCanvas');
-      const a = document.createElement('a');
-      a.download = (document.getElementById('docTitle').value.trim() || 'QR_Code').replace(/\s+/g, '_') + '_QR.png';
-      a.href = canvas.toDataURL('image/png');
-      a.click();
-      showToast('Downloaded QR Code PNG!');
-    }
-
-    function downloadStandaloneHtml() {
-      const title = document.getElementById('docTitle').value.trim() || 'Document';
-      const content = document.getElementById('phoneScreen').innerHTML;
-      const fullHtml = `<!DOCTYPE html>
-<html lang="en" data-palette="${currentPalette}" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(title)}</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b0f19; color: #f1f5f9; max-width: 680px; margin: 0 auto; padding: 2rem 1.25rem; line-height: 1.6; }
-    .preview-badge { display: inline-block; background: rgba(244,63,94,0.15); color: #f43f5e; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
-    .p-item-card { background: rgba(22,30,49,0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1.2rem; margin-bottom: 0.85rem; }
-    .p-btn-sm { display: inline-block; background: #f43f5e; color: #ffffff; padding: 0.4rem 0.8rem; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; }
-    .checklist-row { display: flex; gap: 0.5rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
   </style>
 </head>
 <body>
-  ${content}
-</body>
-</html>`;
-      const blob = new Blob([fullHtml], { type: 'text/html' });
-      const a = document.createElement('a');
-      a.download = title.replace(/\s+/g, '_') + '.html';
-      a.href = URL.createObjectURL(blob);
-      a.click();
-      showToast('Downloaded standalone HTML file!');
+  <div class="container">
+    <header>
+      <div class="logo-badge">⚡ Quick & Simple QR</div>
+      <h1>Normal QR Code Generator</h1>
+      <p class="subtitle">Type a link or text, customize colors, and get a normal scannable QR code immediately.</p>
+    </header>
+
+    <div class="app-grid">
+      <!-- Left Column: Input & Options -->
+      <div class="card">
+        <!-- Tabs: URL vs Plain Text -->
+        <div class="tabs-bar">
+          <button class="tab-btn active" id="tabUrl" onclick="switchType('url')">
+            🔗 Website Link (URL)
+          </button>
+          <button class="tab-btn" id="tabText" onclick="switchType('text')">
+            📝 Plain Text / Note
+          </button>
+        </div>
+
+        <!-- URL Input Mode -->
+        <div id="urlInputGroup" class="form-group">
+          <label>
+            <span>Website or Document URL</span>
+            <span class="quick-preset" onclick="loadReferencesUrl()">⚡ Insert Sleep References Link</span>
+          </label>
+          <input type="text" id="urlInput" placeholder="https://example.com" value="https://ibahaaaldin.github.io/qr-craft/references.html" oninput="generateQr()">
+        </div>
+
+        <!-- Plain Text Input Mode -->
+        <div id="textInputGroup" class="form-group" style="display: none;">
+          <label>
+            <span>Text / Message</span>
+            <span class="quick-preset" onclick="loadSampleText()">⚡ Insert Sample Note</span>
+          </label>
+          <textarea id="textInput" placeholder="Enter any message, wifi note, or plain text to encode directly..." oninput="generateQr()"></textarea>
+          <div class="char-count" id="charCount">0 characters</div>
+        </div>
+
+        <!-- Simple Customizations -->
+        <div class="custom-row">
+          <!-- QR Color -->
+          <div>
+            <div class="section-title">🎨 QR Code Color</div>
+            <div class="color-swatches">
+              <button class="color-dot active" style="background: #0f172a;" data-color="#0f172a" onclick="setQrColor('#0f172a', this)" title="Classic Black"></button>
+              <button class="color-dot" style="background: #4f46e5;" data-color="#4f46e5" onclick="setQrColor('#4f46e5', this)" title="Royal Indigo"></button>
+              <button class="color-dot" style="background: #e11d48;" data-color="#e11d48" onclick="setQrColor('#e11d48', this)" title="Soft Rose"></button>
+              <button class="color-dot" style="background: #059669;" data-color="#059669" onclick="setQrColor('#059669', this)" title="Sage Green"></button>
+              <button class="color-dot" style="background: #9333ea;" data-color="#9333ea" onclick="setQrColor('#9333ea', this)" title="Lavender"></button>
+              <button class="color-dot" style="background: #ea580c;" data-color="#ea580c" onclick="setQrColor('#ea580c', this)" title="Warm Amber"></button>
+              <input type="color" id="customColor" class="color-native" value="#0f172a" onchange="setQrColor(this.value)" title="Pick any color">
+            </div>
+          </div>
+
+          <!-- Dot / Module Shape -->
+          <div>
+            <div class="section-title">🔲 Corner & Dot Style</div>
+            <div class="chip-group">
+              <button class="chip-btn active" data-style="square" onclick="setDotStyle('square', this)">Square (Classic)</button>
+              <button class="chip-btn" data-style="rounded" onclick="setDotStyle('rounded', this)">Rounded Soft</button>
+              <button class="chip-btn" data-style="dots" onclick="setDotStyle('dots', this)">Circle Dots</button>
+            </div>
+          </div>
+
+          <!-- Center Icon / Badge -->
+          <div>
+            <div class="section-title">🖼️ Center Badge (Optional)</div>
+            <div class="chip-group">
+              <button class="chip-btn active" data-icon="none" onclick="setCenterIcon('none', this)">None</button>
+              <button class="chip-btn" data-icon="❤️" onclick="setCenterIcon('❤️', this)">❤️ Heart</button>
+              <button class="chip-btn" data-icon="✨" onclick="setCenterIcon('✨', this)">✨ Sparkle</button>
+              <button class="chip-btn" data-icon="🌿" onclick="setCenterIcon('🌿', this)">🌿 Herb</button>
+              <button class="chip-btn" data-icon="☕" onclick="setCenterIcon('☕', this)">☕ Coffee</button>
+              <button class="chip-btn" data-icon="📚" onclick="setCenterIcon('📚', this)">📚 Book</button>
+              <button class="chip-btn" data-icon="🔗" onclick="setCenterIcon('🔗', this)">🔗 Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live QR Code Preview & Downloads -->
+      <div class="card preview-card">
+        <div class="qr-frame">
+          <canvas id="qrCanvas" width="260" height="260"></canvas>
+        </div>
+
+        <div class="preview-info">
+          <div class="preview-type-badge" id="previewBadge">Website Link</div>
+          <div id="previewTextDesc">Scans to open link directly in phone browser</div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="downloadQr('png')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download PNG (High-Res)</span>
+          </button>
+          <button class="btn btn-secondary" onclick="downloadQr('svg')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13"/><path d="m19 11-7 7-7-7"/><path d="M5 21h14"/></svg>
+            <span>Download SVG Vector</span>
+          </button>
+          <button class="btn btn-secondary" onclick="copyQrImage()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy QR Image</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Works 100% in your browser • No servers, private & instant</p>
+      <p style="margin-top: 0.35rem;">
+        <a href="references.html" target="_blank">View 21 Sleep Studies Literature Page →</a>
+      </p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script>
+    let activeType = 'url';
+    let qrDarkColor = '#0f172a';
+    let qrDotStyle = 'square';
+    let qrCenterIcon = 'none';
+
+    function switchType(type) {
+      activeType = type;
+      document.getElementById('tabUrl').classList.toggle('active', type === 'url');
+      document.getElementById('tabText').classList.toggle('active', type === 'text');
+      document.getElementById('urlInputGroup').style.display = type === 'url' ? 'block' : 'none';
+      document.getElementById('textInputGroup').style.display = type === 'text' ? 'block' : 'none';
+
+      document.getElementById('previewBadge').textContent = type === 'url' ? 'Website Link' : 'Plain Text';
+      document.getElementById('previewTextDesc').textContent = type === 'url' 
+        ? 'Scans to open link directly in phone browser' 
+        : 'Scans to show text directly on your phone';
+
+      generateQr();
     }
 
-    function toggleTheme() {
-      const cur = document.body.getAttribute('data-theme');
-      const target = cur === 'light' ? 'dark' : 'light';
-      document.body.setAttribute('data-theme', target);
-      document.getElementById('themeBtn').textContent = target === 'light' ? '☀️' : '🌙';
+    function setQrColor(hex, btn) {
+      qrDarkColor = hex;
+      document.getElementById('customColor').value = hex;
+      if (btn) {
+        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      generateQr();
+    }
+
+    function setDotStyle(style, btn) {
+      qrDotStyle = style;
+      document.querySelectorAll('[data-style]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      generateQr();
+    }
+
+    function setCenterIcon(icon, btn) {
+      qrCenterIcon = icon;
+      document.querySelectorAll('[data-icon]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      generateQr();
+    }
+
+    function loadReferencesUrl() {
+      const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'references.html';
+      document.getElementById('urlInput').value = url;
+      generateQr();
+      showToast('Loaded sleep references URL!');
+    }
+
+    function loadSampleText() {
+      document.getElementById('textInput').value = `Sweet reminder: You are doing great today! Take a deep breath and keep going ❤️`;
+      generateQr();
+      showToast('Loaded sample text!');
+    }
+
+    function getContentToEncode() {
+      if (activeType === 'url') {
+        const val = document.getElementById('urlInput').value.trim();
+        return val || 'https://example.com';
+      } else {
+        const val = document.getElementById('textInput').value;
+        document.getElementById('charCount').textContent = `${val.length} characters`;
+        return val || 'Hello! Scan me.';
+      }
+    }
+
+    function generateQr() {
+      if (typeof qrcode === 'undefined') return;
+      const content = getContentToEncode();
+
+      try {
+        const qr = qrcode(0, 'M');
+        qr.addData(content);
+        qr.make();
+        drawQr(qr);
+      } catch (err) {
+        try {
+          const qr = qrcode(0, 'L');
+          qr.addData(content);
+          qr.make();
+          drawQr(qr);
+        } catch (e) {
+          console.error("Text too long for single QR", e);
+          showToast('Text is too long for a single QR code');
+        }
+      }
+    }
+
+    function drawQr(qr) {
+      const canvas = document.getElementById('qrCanvas');
+      const count = qr.getModuleCount();
+      const scale = 8; // high resolution
+      const margin = 3;
+      const size = (count + margin * 2) * scale;
+
+      canvas.width = size;
+      canvas.height = size;
+      canvas.style.width = '240px';
+      canvas.style.height = '240px';
+
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.fillStyle = qrDarkColor;
+
+      for (let r = 0; r < count; r++) {
+        for (let c = 0; c < count; c++) {
+          if (qr.isDark(r, c)) {
+            const x = (c + margin) * scale;
+            const y = (r + margin) * scale;
+
+            if (qrDotStyle === 'dots') {
+              // Circular dots
+              ctx.beginPath();
+              ctx.arc(x + scale / 2, y + scale / 2, scale * 0.44, 0, Math.PI * 2);
+              ctx.fill();
+            } else if (qrDotStyle === 'rounded') {
+              // Rounded rectangles
+              roundRect(ctx, x, y, scale, scale, scale * 0.3);
+            } else {
+              // Classic sharp square
+              ctx.fillRect(x, y, scale, scale);
+            }
+          }
+        }
+      }
+
+      // Draw optional center emoji badge
+      if (qrCenterIcon && qrCenterIcon !== 'none') {
+        const center = size / 2;
+        const badgeRadius = scale * 2.8;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(center, center, badgeRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = qrDarkColor;
+        ctx.lineWidth = scale * 0.4;
+        ctx.stroke();
+
+        ctx.font = `${scale * 3.2}px "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(qrCenterIcon, center, center + scale * 0.2);
+      }
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function downloadQr(format) {
+      const canvas = document.getElementById('qrCanvas');
+      if (format === 'png') {
+        const a = document.createElement('a');
+        a.download = 'QRCode.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+        showToast('Downloaded QR Code PNG!');
+      } else {
+        // SVG
+        const content = getContentToEncode();
+        const qr = qrcode(0, 'M');
+        qr.addData(content);
+        qr.make();
+        const svgTag = qr.createSvgTag({ scalable: true, margin: 3 });
+        const blob = new Blob([svgTag], { type: 'image/svg+xml' });
+        const a = document.createElement('a');
+        a.download = 'QRCode.svg';
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        showToast('Downloaded QR Code SVG!');
+      }
+    }
+
+    function copyQrImage() {
+      const canvas = document.getElementById('qrCanvas');
+      canvas.toBlob(blob => {
+        if (!blob) return;
+        navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob })
+        ]).then(() => {
+          showToast('QR Code copied to clipboard!');
+        }).catch(() => {
+          showToast('Clipboard copy not supported by your browser');
+        });
+      });
     }
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
-      document.getElementById('toastMsg').textContent = msg;
+      toast.textContent = msg;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2600);
+      setTimeout(() => toast.classList.remove('show'), 2400);
     }
 
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    }
-
-    // Check if opened as recipient via hash `#d=...`
-    function checkHashRoute() {
-      const hash = window.location.hash;
-      if (hash && hash.startsWith('#d=')) {
-        const compressed = hash.slice(3);
-        try {
-          let json = '';
-          if (typeof LZString !== 'undefined') {
-            json = LZString.decompressFromEncodedURIComponent(compressed);
-          } else {
-            json = decodeURIComponent(compressed);
-          }
-          if (json) {
-            const data = JSON.parse(json);
-            showRecipientView(data);
-            return;
-          }
-        } catch (e) {
-          console.error("Failed to unpack hash payload", e);
-        }
-      }
-      // Default to creator mode with sample sleep references
-      loadTemplate('sleep');
-    }
-
-    function showRecipientView(data) {
-      document.getElementById('studioContainer').style.display = 'none';
-      const rec = document.getElementById('recipientView');
-      rec.classList.add('active');
-
-      document.body.setAttribute('data-palette', data.p || 'rose');
-      document.getElementById('recTitle').textContent = data.t || 'Shared Document';
-      document.getElementById('recSubtitle').textContent = data.s || '';
-      document.getElementById('recBadge').textContent = (data.m || 'ORGANIZED').toUpperCase();
-
-      const container = document.getElementById('recContent');
-      if (data.m === 'citations') {
-        const list = parseCitations(data.c || '');
-        container.innerHTML = list.map(c => `
-          <div class="p-item-card" style="padding: 1.25rem;">
-            <div class="p-item-top">
-              <span class="p-item-index" style="font-size: 0.8rem; padding: 0.25rem 0.5rem;">[${c.id}]</span>
-              <span class="p-item-cat">${escapeHtml(c.category)}</span>
-            </div>
-            <div class="p-item-title" style="font-size: 1.05rem;">${escapeHtml(c.title)}</div>
-            ${c.year ? `<div class="p-item-meta" style="font-size: 0.85rem;">Year: ${c.year}</div>` : ''}
-            <div class="p-item-actions" style="margin-top: 0.85rem;">
-              ${c.url ? `
-                <a href="${c.url}" target="_blank" class="p-btn-sm" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">
-                  <span>Open Source</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                </a>
-              ` : ''}
-              <button class="p-btn-sm p-btn-copy" style="padding: 0.45rem 0.8rem; font-size: 0.82rem;" onclick="copySnippet('${encodeURIComponent(c.raw)}')">
-                <span>Copy APA</span>
-              </button>
-            </div>
-          </div>
-        `).join('');
-      } else if (data.m === 'checklist') {
-        const lines = (data.c || '').split('\n').filter(l => l.trim().length > 0);
-        container.innerHTML = lines.map(line => `
-          <div class="checklist-row" style="padding: 0.85rem 1rem;" onclick="this.classList.toggle('checked')">
-            <div class="check-box" style="width: 20px; height: 20px;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <span class="check-text" style="font-size: 0.95rem;">${escapeHtml(line)}</span>
-          </div>
-        `).join('');
-      } else if (data.m === 'letter') {
-        container.innerHTML = `
-          <div class="letter-card" style="padding: 2.2rem 1.75rem; font-size: 1.05rem;">
-            <div class="letter-date">${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
-            <div style="white-space: pre-wrap;">${escapeHtml(data.c)}</div>
-          </div>
-        `;
-      } else {
-        const paragraphs = (data.c || '').split('\n\n').filter(p => p.trim().length > 0);
-        container.innerHTML = paragraphs.map(p => `
-          <div class="p-item-card" style="padding: 1.25rem; font-size: 0.95rem; white-space: pre-wrap;">
-            ${escapeHtml(p)}
-          </div>
-        `).join('');
-      }
-    }
-
-    // Initialize
-    window.addEventListener('DOMContentLoaded', checkHashRoute);
+    window.addEventListener('DOMContentLoaded', () => {
+      generateQr();
+    });
   </script>
 </body>
 </html>
