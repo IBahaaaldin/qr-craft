@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuickQR — Simple & Clean QR Code Generator</title>
-  <meta name="description" content="Generate normal QR codes for links, text, and notes with simple customization. Free, instant, and private.">
+  <meta name="description" content="Generate normal QR codes for links, text, and uploaded files with simple customization. Free, instant, and private.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -87,7 +87,7 @@
     /* Main Grid */
     .app-grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.25fr 0.75fr;
       gap: 1.75rem;
       align-items: start;
     }
@@ -118,20 +118,21 @@
     }
     .tab-btn {
       flex: 1;
-      padding: 0.6rem 0.8rem;
+      padding: 0.65rem 0.6rem;
       border: none;
       background: transparent;
       color: var(--muted);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       transition: all 0.15s ease;
       font-family: inherit;
+      white-space: nowrap;
     }
     .tab-btn.active {
       background: var(--card);
@@ -146,12 +147,15 @@
     label {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 0.82rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--muted);
       margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
     }
     .quick-preset {
       color: var(--primary);
@@ -193,17 +197,84 @@
       text-align: right;
     }
 
+    /* Upload Box */
+    .upload-dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 2.2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(0, 0, 0, 0.015);
+    }
+    @media (prefers-color-scheme: dark) {
+      .upload-dropzone { background: rgba(255, 255, 255, 0.02); }
+    }
+    .upload-dropzone:hover, .upload-dropzone.dragover {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.05);
+    }
+    .upload-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 0.75rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 50%;
+    }
+    .upload-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+    .upload-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .file-card {
+      display: none;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-top: 0.85rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    @media (prefers-color-scheme: dark) {
+      .file-card { background: rgba(255, 255, 255, 0.04); }
+    }
+    .file-details {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      overflow: hidden;
+    }
+    .file-name {
+      font-weight: 700;
+      font-size: 0.88rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 240px;
+    }
+    .file-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
     /* Customization Section */
     .section-title {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
-
-    /* Color Pickers */
     .custom-row {
       display: flex;
       flex-direction: column;
@@ -277,11 +348,14 @@
     }
     .qr-frame {
       background: #ffffff;
-      padding: 18px;
-      border-radius: 18px;
+      padding: 16px;
+      border-radius: 16px;
       display: inline-block;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       margin-bottom: 1.25rem;
+      position: relative;
+      min-width: 240px;
+      min-height: 240px;
     }
     #qrCanvas {
       display: block;
@@ -375,7 +449,6 @@
       opacity: 1;
     }
 
-    /* Footer */
     footer {
       text-align: center;
       margin-top: 3.5rem;
@@ -390,23 +463,26 @@
     <header>
       <div class="logo-badge">⚡ Quick & Simple QR</div>
       <h1>Normal QR Code Generator</h1>
-      <p class="subtitle">Type a link or text, customize colors, and get a normal scannable QR code immediately.</p>
+      <p class="subtitle">Enter a link, plain text, or upload a file. Get a normal scannable QR code immediately.</p>
     </header>
 
     <div class="app-grid">
       <!-- Left Column: Input & Options -->
       <div class="card">
-        <!-- Tabs: URL vs Plain Text -->
+        <!-- Tabs: Link vs Text vs Upload -->
         <div class="tabs-bar">
           <button class="tab-btn active" id="tabUrl" onclick="switchType('url')">
-            🔗 Website Link (URL)
+            🔗 Website Link
           </button>
           <button class="tab-btn" id="tabText" onclick="switchType('text')">
-            📝 Plain Text / Note
+            📝 Plain Text
+          </button>
+          <button class="tab-btn" id="tabFile" onclick="switchType('file')">
+            📁 Upload File
           </button>
         </div>
 
-        <!-- URL Input Mode -->
+        <!-- 1. URL Input Mode -->
         <div id="urlInputGroup" class="form-group">
           <label>
             <span>Website or Document URL</span>
@@ -415,14 +491,46 @@
           <input type="text" id="urlInput" placeholder="https://example.com" value="https://ibahaaaldin.github.io/qr-craft/references.html" oninput="generateQr()">
         </div>
 
-        <!-- Plain Text Input Mode -->
+        <!-- 2. Plain Text Input Mode -->
         <div id="textInputGroup" class="form-group" style="display: none;">
           <label>
-            <span>Text / Message</span>
-            <span class="quick-preset" onclick="loadSampleText()">⚡ Insert Sample Note</span>
+            <span>Text / Message to Encode</span>
+            <span class="quick-preset" onclick="loadSleepReferencesText()">⚡ Load 21 References Text</span>
           </label>
-          <textarea id="textInput" placeholder="Enter any message, wifi note, or plain text to encode directly..." oninput="generateQr()"></textarea>
+          <textarea id="textInput" placeholder="Type or paste any text to encode into your QR code..." oninput="handleTextInput()"></textarea>
           <div class="char-count" id="charCount">0 characters</div>
+        </div>
+
+        <!-- 3. File Upload Mode -->
+        <div id="fileInputGroup" class="form-group" style="display: none;">
+          <label>
+            <span>Upload Document or Text File</span>
+            <span class="quick-preset" onclick="loadSampleTextFile()">⚡ Try Sample File</span>
+          </label>
+          
+          <input type="file" id="filePicker" style="display: none;" onchange="handleFileSelected(event)">
+          
+          <div class="upload-dropzone" id="dropZone" onclick="document.getElementById('filePicker').click()">
+            <div class="upload-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="upload-title">Click to upload or drag & drop file here</div>
+            <div class="upload-desc">Supports .txt, .pdf, .md, .csv, documents, or notes</div>
+          </div>
+
+          <div class="file-card" id="fileCard">
+            <div class="file-details">
+              <span style="font-size: 1.4rem;">📄</span>
+              <div>
+                <div class="file-name" id="fileName">file.txt</div>
+                <div class="file-meta" id="fileMeta">0 KB</div>
+              </div>
+            </div>
+            <button class="chip-btn" style="padding: 0.3rem 0.6rem;" onclick="removeUploadedFile()">Remove</button>
+          </div>
+
+          <!-- Uploaded file link display -->
+          <div id="fileUploadStatus" style="margin-top: 0.85rem; font-size: 0.82rem; color: var(--muted); display: none;"></div>
         </div>
 
         <!-- Simple Customizations -->
@@ -437,7 +545,7 @@
               <button class="color-dot" style="background: #059669;" data-color="#059669" onclick="setQrColor('#059669', this)" title="Sage Green"></button>
               <button class="color-dot" style="background: #9333ea;" data-color="#9333ea" onclick="setQrColor('#9333ea', this)" title="Lavender"></button>
               <button class="color-dot" style="background: #ea580c;" data-color="#ea580c" onclick="setQrColor('#ea580c', this)" title="Warm Amber"></button>
-              <input type="color" id="customColor" class="color-native" value="#0f172a" onchange="setQrColor(this.value)" title="Pick any color">
+              <input type="color" id="customColor" class="color-native" value="#0f172a" onchange="setQrColor(this.value)" title="Pick custom color">
             </div>
           </div>
 
@@ -470,7 +578,7 @@
       <!-- Right Column: Live QR Code Preview & Downloads -->
       <div class="card preview-card">
         <div class="qr-frame">
-          <canvas id="qrCanvas" width="260" height="260"></canvas>
+          <canvas id="qrCanvas" width="240" height="240"></canvas>
         </div>
 
         <div class="preview-info">
@@ -510,18 +618,53 @@
     let qrDarkColor = '#0f172a';
     let qrDotStyle = 'square';
     let qrCenterIcon = 'none';
+    let uploadedFileContent = null;
+    let uploadedFileUrl = null;
+    let uploadedFileName = '';
+
+    const SLEEP_REFERENCES_TEXT = `References:
+[1] Cleveland Clinic. (2023, February 13). Insomnia. Cleveland Clinic. https://my.clevelandclinic.org/health/diseases/12119-insomnia
+[2] Lieberman, J. A. (2007). Update on the safety considerations in the management of insomnia with hypnotics: Incorporating modified-release formulations into primary care. Primary Care Companion to the Journal of Clinical Psychiatry, 9(1), 25–31. PubMed Central. https://doi.org/10.4088/pcc.v09n0105
+[3] Ji Won Yeom, & Cho, C.-H. (2024). Herbal and natural supplements for improving sleep: A literature review. Psychiatry Investigation, 21(8). https://doi.org/10.30773/pi.2024.0121
+[4] Buchbauer, G., Jirovetz, L., & Jäger, W. (1991). Aromatherapy: Evidence for sedative effects of the essential oil of lavender after inhalation. Zeitschrift Für Naturforschung C, 46(11–12), 1067–1072. https://doi.org/10.1515/znc-1991-11-1223
+[5] Ren, Y.-L., Chu, W.-W., Yang, X.-W., Xin, Le, Gao, J.-X., Yan, G.-Z., Wang, C., Chen, Y.-N., Xie, J.-F., Spruyt, K., Lin, J.-S., Hou, Y.-P., & Shao, Y.-F. (2024). Lavender improves sleep through olfactory perception and GABAergic neurons of the central amygdala. Journal of Ethnopharmacology, 337, 118942. https://doi.org/10.1016/j.jep.2024.118942
+[6] Koulivand, P. H., Khaleghi Ghadiri, M., & Gorji, A. (2013). Lavender and the nervous system. Evidence-Based Complementary and Alternative Medicine, 2013(681304), 1–10. https://doi.org/10.1155/2013/681304
+[7] sahu, L., Kumar Nema, R., Patel, S., Suchita Wamankar, & Patel, V. (2025). The science behind lavender in insomnia natural sleep aid: A comprehensive review. International Journal of Scientific Research and Technology, 03(01), 7–13. https://doi.org/10.5281/zenodo.14789673
+[8] nccih. (2020, August). Lavender. Nccih. https://www.nccih.nih.gov/health/lavender
+[9] https://www.facebook.com/Drugscom. (2019). Lavender. Drugs.Com; Drugs.com. https://www.drugs.com/mtm/lavender.html
+[10] Awad, R., Muhammad, A., Durst, T., Trudeau, V. L., & Arnason, J. T. (2009). Bioassay‐guided fractionation of lemon balm (Melissa officinalisL.) Using anin vitromeasure of GABA transaminase activity. Phytotherapy Research, 23(8), 1075–1081. https://doi.org/10.1002/ptr.2712
+[11] Anonymous. (2018, September 17). Melissae folium - European Medicines Agency. European Medicines Agency. https://www.ema.europa.eu/en/medicines/herbal/melissae-folium
+[12] Lemon balm: Uses, side effects, interactions, pictures, warnings & dosing - WebMD. (2025). Webmd.Com. https://www.webmd.com/vitamins-supplements/lemon-balm
+[13] Sleep disorders, anxiety calmed with Lemon Balm. (2009, March 9). Psychiatry Advisor. https://www.psychiatryadvisor.com/features/sleep-disorders-anxiety-calmed-with-lemon-balm/
+[14] National Institutes of Health. (2023, October 24). Office of Dietary Supplements - Ashwagandha: Is It Helpful for stress, anxiety, or sleep? Ods.Od.Nih.Gov. https://ods.od.nih.gov/factsheets/Ashwagandha-HealthProfessional/
+[15] Kaushik, M. K., Kaul, S. C., Wadhwa, R., Yanagisawa, M., & Urade, Y. (2017). Triethylene glycol, an active component of Ashwagandha (Withania somnifera) leaves, is responsible for sleep induction. PLOS ONE, 12(2), e0172508. https://doi.org/10.1371/journal.pone.0172508
+[16] Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D. (2019). Efficacy and safety of ashwagandha (withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study. Cureus, 11(9). https://doi.org/10.7759/cureus.5797
+[17] National Center for Complementary and Integrative Health. (2023, March). Ashwagandha. Nccih. https://www.nccih.nih.gov/health/ashwagandha
+[18] Lopresti, A. L., Smith, S. J., Metse, A. P., & Drummond, P. D. (2020). Effects of saffron on sleep quality in healthy adults with self-reported poor sleep: A randomized, double-blind, placebo-controlled trial. Journal of Clinical Sleep Medicine, 16(6). https://doi.org/10.5664/jcsm.8376
+[19] Griffin, R. M. (n.d.). Saffron: Uses and risks. WebMD. Retrieved October 29, 2026, from https://www.webmd.com/vitamins-and-supplements/saffron-uses-and-risks
+[20] Wani, K. K. (2026, March 27). Saffron drug interactions: 7 Medications to never mix with Kesar. Kashmiril. https://kashmiril.com/blogs/journal/saffron-drug-interactions
+[21] Langade, D., Kanchi, S., Salve, J., Debnath, K., & Ambegaokar, D. (2019). Efficacy and safety of ashwagandha (withania somnifera) root extract in insomnia and anxiety: A double-blind, randomized, placebo-controlled study. Cureus, 11(9). https://doi.org/10.7759/cureus.5797`;
 
     function switchType(type) {
       activeType = type;
       document.getElementById('tabUrl').classList.toggle('active', type === 'url');
       document.getElementById('tabText').classList.toggle('active', type === 'text');
+      document.getElementById('tabFile').classList.toggle('active', type === 'file');
+
       document.getElementById('urlInputGroup').style.display = type === 'url' ? 'block' : 'none';
       document.getElementById('textInputGroup').style.display = type === 'text' ? 'block' : 'none';
+      document.getElementById('fileInputGroup').style.display = type === 'file' ? 'block' : 'none';
 
-      document.getElementById('previewBadge').textContent = type === 'url' ? 'Website Link' : 'Plain Text';
-      document.getElementById('previewTextDesc').textContent = type === 'url' 
-        ? 'Scans to open link directly in phone browser' 
-        : 'Scans to show text directly on your phone';
+      if (type === 'url') {
+        document.getElementById('previewBadge').textContent = 'Website Link';
+        document.getElementById('previewTextDesc').textContent = 'Scans to open link directly in phone browser';
+      } else if (type === 'text') {
+        document.getElementById('previewBadge').textContent = 'Plain Text';
+        document.getElementById('previewTextDesc').textContent = 'Scans to show text directly on phone screen';
+      } else {
+        document.getElementById('previewBadge').textContent = 'Uploaded File';
+        document.getElementById('previewTextDesc').textContent = 'Scans to open uploaded document / file';
+      }
 
       generateQr();
     }
@@ -554,29 +697,217 @@
       const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'references.html';
       document.getElementById('urlInput').value = url;
       generateQr();
-      showToast('Loaded sleep references URL!');
+      showToast('Loaded sleep references link!');
     }
 
-    function loadSampleText() {
-      document.getElementById('textInput').value = `Sweet reminder: You are doing great today! Take a deep breath and keep going ❤️`;
+    function loadSleepReferencesText() {
+      document.getElementById('textInput').value = SLEEP_REFERENCES_TEXT;
+      handleTextInput();
+      showToast('Loaded 21 sleep references text!');
+    }
+
+    function handleTextInput() {
+      const val = document.getElementById('textInput').value;
+      document.getElementById('charCount').textContent = `${val.length} characters`;
+
+      if (val.length > 2500) {
+        // Automatically publish large text to instant share link so QR code doesn't break
+        createCloudLinkForText(val);
+      } else {
+        generateQr();
+      }
+    }
+
+    async function createCloudLinkForText(text) {
+      document.getElementById('previewTextDesc').textContent = 'Document is large. Generating instant scan link...';
+      try {
+        const res = await fetch('https://dpaste.com/api/v2/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ content: text, syntax: 'text', expiry_days: '30' })
+        });
+        if (res.ok) {
+          const url = (await res.text()).trim();
+          document.getElementById('previewBadge').textContent = 'Hosted Document Link';
+          document.getElementById('previewTextDesc').textContent = `Scans to open full document (${url})`;
+          renderRawContent(url);
+          showToast('Created instant link for large text!');
+          return;
+        }
+      } catch (e) {
+        console.warn('Could not post to dpaste, falling back to direct QR', e);
+      }
       generateQr();
-      showToast('Loaded sample text!');
+    }
+
+    // File Upload Handlers
+    const dropZone = document.getElementById('dropZone');
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      }, false);
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+      }, false);
+    });
+    dropZone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) processFile(files[0]);
+    });
+
+    function handleFileSelected(event) {
+      const files = event.target.files;
+      if (files.length > 0) processFile(files[0]);
+    }
+
+    async function processFile(file) {
+      uploadedFileName = file.name;
+      document.getElementById('fileName').textContent = file.name;
+      document.getElementById('fileMeta').textContent = `${(file.size / 1024).toFixed(1)} KB • ${file.type || 'Document'}`;
+      document.getElementById('fileCard').style.display = 'flex';
+      
+      const statusEl = document.getElementById('fileUploadStatus');
+      statusEl.style.display = 'block';
+      statusEl.textContent = 'Reading file content...';
+
+      // If text-like file, read text directly
+      if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.md') || file.name.endsWith('.csv') || file.name.endsWith('.json')) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          uploadedFileContent = e.target.result;
+          statusEl.textContent = `File read: ${uploadedFileContent.length} characters.`;
+
+          if (uploadedFileContent.length <= 2000) {
+            // Fits directly into normal QR!
+            uploadedFileUrl = null;
+            document.getElementById('previewBadge').textContent = 'File Text';
+            document.getElementById('previewTextDesc').textContent = `Scans to read "${file.name}" directly on phone`;
+            renderRawContent(uploadedFileContent);
+            showToast('QR generated directly from file!');
+          } else {
+            // Large text file: create instant link
+            statusEl.textContent = 'File is large. Uploading to create instant scan link...';
+            await uploadTextToDpaste(uploadedFileContent, file.name);
+          }
+        };
+        reader.readAsText(file);
+      } else {
+        // Binary or PDF: upload to instant host
+        statusEl.textContent = 'Document/Binary file. Creating scan link...';
+        await uploadBinaryFile(file);
+      }
+    }
+
+    async function uploadTextToDpaste(content, filename) {
+      const statusEl = document.getElementById('fileUploadStatus');
+      try {
+        const res = await fetch('https://dpaste.com/api/v2/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            content: content,
+            title: filename,
+            syntax: filename.endsWith('.md') ? 'markdown' : 'text',
+            expiry_days: '30'
+          })
+        });
+        if (res.ok) {
+          uploadedFileUrl = (await res.text()).trim();
+          statusEl.innerHTML = `✅ Ready! File hosted at: <a href="${uploadedFileUrl}" target="_blank" style="color:var(--primary); font-weight:700;">${uploadedFileUrl}</a>`;
+          document.getElementById('previewBadge').textContent = 'File Link';
+          document.getElementById('previewTextDesc').textContent = `Scans to view "${filename}" online (${uploadedFileUrl})`;
+          renderRawContent(uploadedFileUrl);
+          showToast('File QR generated successfully!');
+          return;
+        }
+      } catch (err) {
+        console.error('Upload failed', err);
+      }
+      statusEl.textContent = 'Could not create cloud link. Falling back to local text snippet.';
+      renderRawContent(content.slice(0, 1500));
+    }
+
+    async function uploadBinaryFile(file) {
+      const statusEl = document.getElementById('fileUploadStatus');
+      statusEl.textContent = 'Uploading file to cloud for QR code...';
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch('https://file.io/?expires=14d', {
+          method: 'POST',
+          body: formData
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.link) {
+            uploadedFileUrl = data.link;
+            statusEl.innerHTML = `✅ Ready! File hosted at: <a href="${uploadedFileUrl}" target="_blank" style="color:var(--primary); font-weight:700;">${uploadedFileUrl}</a>`;
+            document.getElementById('previewBadge').textContent = 'File Download Link';
+            document.getElementById('previewTextDesc').textContent = `Scans to download "${file.name}" on phone`;
+            renderRawContent(uploadedFileUrl);
+            showToast('File QR code generated!');
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Binary upload failed', err);
+      }
+      statusEl.textContent = 'File uploaded locally. To share large binary files, use the Website Link tab.';
+    }
+
+    function removeUploadedFile() {
+      uploadedFileContent = null;
+      uploadedFileUrl = null;
+      uploadedFileName = '';
+      document.getElementById('filePicker').value = '';
+      document.getElementById('fileCard').style.display = 'none';
+      document.getElementById('fileUploadStatus').style.display = 'none';
+      drawEmptyCanvas('Upload a file to generate QR');
+    }
+
+    function loadSampleTextFile() {
+      const sample = `Sleep & Botanicals Summary\n\n1. Lavender: Olfactory GABAergic pathway into central amygdala.\n2. Lemon Balm: Rosmarinic acid inhibits GABA transaminase.\n3. Ashwagandha: Triethylene glycol promotes non-REM sleep.\n4. Saffron: Crocin increases evening sleep quality.`;
+      const blob = new Blob([sample], { type: 'text/plain' });
+      const file = new File([blob], 'sleep-summary.txt', { type: 'text/plain' });
+      processFile(file);
     }
 
     function getContentToEncode() {
       if (activeType === 'url') {
         const val = document.getElementById('urlInput').value.trim();
-        return val || 'https://example.com';
+        return val || '';
+      } else if (activeType === 'text') {
+        return document.getElementById('textInput').value.trim();
       } else {
-        const val = document.getElementById('textInput').value;
-        document.getElementById('charCount').textContent = `${val.length} characters`;
-        return val || 'Hello! Scan me.';
+        // File tab
+        if (uploadedFileUrl) return uploadedFileUrl;
+        if (uploadedFileContent) return uploadedFileContent;
+        return '';
       }
     }
 
     function generateQr() {
-      if (typeof qrcode === 'undefined') return;
       const content = getContentToEncode();
+      if (!content) {
+        if (activeType === 'text') {
+          drawEmptyCanvas('Enter text to generate QR code');
+        } else if (activeType === 'file') {
+          drawEmptyCanvas('Upload a file to generate QR code');
+        } else {
+          drawEmptyCanvas('Enter URL to generate QR code');
+        }
+        return;
+      }
+
+      renderRawContent(content);
+    }
+
+    function renderRawContent(content) {
+      if (typeof qrcode === 'undefined') return;
 
       try {
         const qr = qrcode(0, 'M');
@@ -590,16 +921,39 @@
           qr.make();
           drawQr(qr);
         } catch (e) {
-          console.error("Text too long for single QR", e);
-          showToast('Text is too long for a single QR code');
+          console.warn('Content too large for direct QR, creating link...', e);
+          if (activeType === 'text') {
+            createCloudLinkForText(content);
+          } else {
+            drawEmptyCanvas('Content too large for single QR code');
+          }
         }
       }
+    }
+
+    function drawEmptyCanvas(message) {
+      const canvas = document.getElementById('qrCanvas');
+      canvas.width = 240;
+      canvas.height = 240;
+      canvas.style.width = '240px';
+      canvas.style.height = '240px';
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, 240, 240);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.strokeRect(1, 1, 238, 238);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(message, 120, 120);
     }
 
     function drawQr(qr) {
       const canvas = document.getElementById('qrCanvas');
       const count = qr.getModuleCount();
-      const scale = 8; // high resolution
+      const scale = 8;
       const margin = 3;
       const size = (count + margin * 2) * scale;
 
@@ -621,22 +975,19 @@
             const y = (r + margin) * scale;
 
             if (qrDotStyle === 'dots') {
-              // Circular dots
               ctx.beginPath();
               ctx.arc(x + scale / 2, y + scale / 2, scale * 0.44, 0, Math.PI * 2);
               ctx.fill();
             } else if (qrDotStyle === 'rounded') {
-              // Rounded rectangles
               roundRect(ctx, x, y, scale, scale, scale * 0.3);
             } else {
-              // Classic sharp square
               ctx.fillRect(x, y, scale, scale);
             }
           }
         }
       }
 
-      // Draw optional center emoji badge
+      // Draw center badge if chosen
       if (qrCenterIcon && qrCenterIcon !== 'none') {
         const center = size / 2;
         const badgeRadius = scale * 2.8;
@@ -673,6 +1024,12 @@
     }
 
     function downloadQr(format) {
+      const content = getContentToEncode();
+      if (!content) {
+        showToast('Please enter content or upload a file first!');
+        return;
+      }
+
       const canvas = document.getElementById('qrCanvas');
       if (format === 'png') {
         const a = document.createElement('a');
@@ -681,8 +1038,6 @@
         a.click();
         showToast('Downloaded QR Code PNG!');
       } else {
-        // SVG
-        const content = getContentToEncode();
         const qr = qrcode(0, 'M');
         qr.addData(content);
         qr.make();
